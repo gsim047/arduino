@@ -23,33 +23,44 @@
 */
 
 int n = 0;
+int delay1 = 100;
+int delay2 = 1000;
 ADC_MODE(ADC_VCC);
+int levHIGH = HIGH;
+int levLOW = LOW;
 int ledx = 0;
+
 
 // the setup function runs once when you press reset or power the board
 void setup() {
   // initialize digital pin LED_BUILTIN as an output.
   Serial.begin(9600);
   pinMode(ledx, OUTPUT);
+
   n = 0;
+  delay1 = 100;
+  delay2 = 1000;
+  ledx = 0;
+
+  int inv = 1;
+  if ( inv ){
+    levHIGH = LOW;
+    levLOW = HIGH;
+  }
 }
+
 
 // the loop function runs over and over again forever
 void loop() {
-  int lev1 = HIGH;
-  int lev2 = LOW;
-  if ( 0 ){
-    lev1 = LOW;
-    lev2 = HIGH;
-  }
-  digitalWrite(ledx, lev1);   // turn the LED on (HIGH is the voltage level)
-  delay(200);                       // wait for a second
-  digitalWrite(ledx, lev2);    // turn the LED off by making the voltage LOW
-  delay(200);                       // wait for a second
-  digitalWrite(ledx, lev1);   // turn the LED on (HIGH is the voltage level)
-  delay(200);                       // wait for a second
-  digitalWrite(ledx, lev2);    // turn the LED off by making the voltage LOW
-  delay(1000);                       // wait for a second
+  
+  digitalWrite(ledx, levHIGH);   // turn the LED on (HIGH is the voltage level)
+  delay(delay1);                       // wait for a second
+  digitalWrite(ledx, levLOW);    // turn the LED off by making the voltage LOW
+  delay(delay1);                       // wait for a second
+  digitalWrite(ledx, levHIGH);   // turn the LED on (HIGH is the voltage level)
+  delay(delay1);                       // wait for a second
+  digitalWrite(ledx, levLOW);    // turn the LED off by making the voltage LOW
+  delay(delay2);                       // wait for a second
   n++;
   int vcc = ESP.getVcc();
   Serial.println(n);
