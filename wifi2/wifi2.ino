@@ -16,6 +16,13 @@
 
 
 ESP8266WiFiMulti WiFiMulti;
+int n = 0;
+char ssid[] = "HomeAsus87U";
+char psw[] = "atlana8312";
+char url0[] = "http://192.168.1.201";
+
+ADC_MODE(ADC_VCC);
+
 
 
 void WiFiConnect()
@@ -24,7 +31,7 @@ void WiFiConnect()
     return;
   }
   WiFi.mode(WIFI_STA);
-  WiFiMulti.addAP("HomeAsus_2", "atlana8312");
+  WiFiMulti.addAP(ssid, psw);
 }//
 
 
@@ -39,10 +46,11 @@ void blink(int tim, int level1, int level0)
 
 void setup() 
 {
-  Serial.begin(9600);
+  Serial.begin(115200);
   // Serial.setDebugOutput(true);
   pinMode(LED_BUILTIN, OUTPUT);
   blink(200, LOW, HIGH);
+  n = 0;
 
 
   Serial.println();
@@ -55,8 +63,6 @@ void setup()
     delay(1000);
   }
 
-  //WiFi.mode(WIFI_STA);
-  //WiFiMulti.addAP("HomeAsus_2", "atlana8312");
   WiFiConnect();
 }
 
@@ -73,7 +79,14 @@ void loop() {
     HTTPClient http;
 
     Serial.print("[HTTP] begin...\n");
-    if ( http.begin(client, "http://192.168.2.107") ){  // HTTP
+    char url[256];
+    n++;
+    int vcc = ESP.getVcc();
+
+    sprintf(url, "%s/esp/set1.php?dat=%d", url0, vcc);
+    Serial.println(url);
+    
+    if ( http.begin(client, url) ){  // HTTP
 
 
       Serial.print("[HTTP] GET...\n");
@@ -87,7 +100,7 @@ void loop() {
 
         // file found at server
         if (httpCode == HTTP_CODE_OK || httpCode == HTTP_CODE_MOVED_PERMANENTLY) {
-          Serial.println("444");
+          Serial.println("done..");
           String payload = http.getString();
           Serial.println(payload);
         }
@@ -103,5 +116,9 @@ void loop() {
     }
   }
 
-  delay(10000);
+  Serial.println(n);
+  //Serial.println(vcc);
+
+
+  delay(60000);
 }
