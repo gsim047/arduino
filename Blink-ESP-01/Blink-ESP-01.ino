@@ -22,37 +22,23 @@
   https://www.arduino.cc/en/Tutorial/BuiltInExamples/Blink
 */
 
-int n = 0;
-ADC_MODE(ADC_VCC);
-int ledx = 1;
-int inv = 0;
-
 // the setup function runs once when you press reset or power the board
 void setup() {
   // initialize digital pin LED_BUILTIN as an output.
+  pinMode(4, OUTPUT);
   Serial.begin(115200);
-  pinMode(ledx, OUTPUT);
-  n = 0;
 }
 
 // the loop function runs over and over again forever
 void loop() {
-  int lev1 = HIGH;
-  int lev2 = LOW;
-  if ( inv ){
-    lev1 = LOW;
-    lev2 = HIGH;
-  }
-  digitalWrite(ledx, lev1);   // turn the LED on (HIGH is the voltage level)
-  delay(100);                       // wait for a second
-//  digitalWrite(ledx, lev2);    // turn the LED off by making the voltage LOW
-//  delay(200);                       // wait for a second
-//  digitalWrite(ledx, lev1);   // turn the LED on (HIGH is the voltage level)
-//  delay(200);                       // wait for a second
-  digitalWrite(ledx, lev2);    // turn the LED off by making the voltage LOW
-  delay(500);                       // wait for a second
-  n++;
-  int vcc = ESP.getVcc();
-  Serial.println(n);
-  Serial.println(vcc);
+  digitalWrite(LED_BUILTIN, HIGH);   // turn the LED on (HIGH is the voltage level)
+  delay(1000);                       // wait for a second
+  digitalWrite(LED_BUILTIN, LOW);    // turn the LED off by making the voltage LOW
+  delay(1000);                       // wait for a second
+
+    int sensorValue = analogRead(A0);
+  // Convert the analog reading (which goes from 0 - 1023) to a voltage (0 - 5V):
+  float voltage = sensorValue * (5.0 / 1023.0);
+  // print out the value you read:
+  Serial.println(voltage);
 }

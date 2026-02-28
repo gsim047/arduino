@@ -30,8 +30,11 @@ int delay2 = 1000;
 int levHIGH = HIGH;
 int levLOW = LOW;
 
+
 int inpx = 5;
+
 int ledx = 2; //LED_BUILTIN; //0;
+int inv = 1;
 // BUILTIN: 2/1
 // D0: 16/0
 // D1: 5/0
@@ -44,7 +47,7 @@ int ledx = 2; //LED_BUILTIN; //0;
 // the setup function runs once when you press reset or power the board
 void setup() {
   // initialize digital pin LED_BUILTIN as an output.
-  Serial.begin(9600);
+  Serial.begin(115200);
   pinMode(ledx, OUTPUT);
   pinMode(inpx, INPUT);
   n = 0;
@@ -52,7 +55,6 @@ void setup() {
   delay1 = 100;
   delay2 = 500;
 
-  int inv = 1;
   if ( inv ){
     levHIGH = LOW;
     levLOW = HIGH;
@@ -63,8 +65,8 @@ void setup() {
 // the loop function runs over and over again forever
 void loop() 
 {
-  int xx = digitalRead(inpx);
-  if ( xx < 1 )
+//  int xx = digitalRead(inpx);
+//  if ( xx < 1 )
     digitalWrite(ledx, levHIGH);   // turn the LED on (HIGH is the voltage level)
   delay(delay1);                       // wait for a second
   //if ( xx < 1 )
@@ -74,6 +76,6 @@ void loop()
   n++;
   int vcc = ESP.getVcc();
   Serial.println(n);
-  Serial.println(xx);
+//  Serial.println(xx);
   //Serial.println(vcc);
 }
