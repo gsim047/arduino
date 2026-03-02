@@ -21,6 +21,7 @@
 
 #include <gmNetTools.h>
 #include <gmUrl.h>
+#include <gmTimer.h>
 
 //void setup(){ Serial.begin(115200); Serial.println(); Serial.print("ESP Board MAC Address: "); Serial.println(WiFi.macAddress()); } void loop(){ }
 
@@ -173,7 +174,10 @@ void loop()
 		}
 		Serial.println(url.get());
 		n++;
-		callUrl(url.get().c_str());  //
+
+		String res;
+		int code = url.call(res);  //
+		Serial.println(res);
 
 /*    
     if ( http.begin(client, url) ){  // HTTP

@@ -22,7 +22,10 @@ public:
 	void set(const String &key, int val);
 	void set(const String &key, float val);
 
-	String get() const;
+	String get() const; // ret url
+	int call(String &res);      // ret errorcode & result of curl
+	static String extract(const String &res, const String &s1, const String &s2);
+
 
 public:
 	String url0;  // https://server.ru or http://192.168.1.10
