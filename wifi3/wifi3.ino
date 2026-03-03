@@ -1,9 +1,3 @@
-/**
-   BasicHTTPClient.ino
-
-    Created on: 24.05.2015
-
-*/
 
 #include <Arduino.h>
 #include <gmBlink.h>
@@ -23,8 +17,6 @@
 #include <gmUrl.h>
 #include <gmTimer.h>
 #include <gmCfgRead.h>
-
-//void setup(){ Serial.begin(115200); Serial.println(); Serial.print("ESP Board MAC Address: "); Serial.println(WiFi.macAddress()); } void loop(){ }
 
 //#include "/home/user/Arduino/wifi_info.h"
 
@@ -82,7 +74,7 @@ void setup()
 	//}
 
 	//blink(200, levLOW, levHIGH);
-	bl.bl(200);
+	bl.blink(200);
 	n = 0;
 
 	Serial.println();
@@ -147,13 +139,15 @@ static void callUrl(const char *url)
 }// callUrl
 */
 
+int toDelay = 10000;
+
 void loop() 
 {
 	// wait for WiFi connection
 	WiFiConnect(WiFiMulti);
   
 	if ( (WiFiMulti.run() == WL_CONNECTED) ){
-		bl.bl(200);
+		bl.blink(200);
 		//Serial.printf(WiFiMulti.);
 
 //		WiFiClient client;
@@ -178,12 +172,26 @@ void loop()
 
 		String res;
 		int code = url.call(res);  //
-		Serial.println(res);
+		//Serial.println(res);
 		String bd = gmUrl::extract(res, "<pre>", "</pre>");
+		Serial.println(bd);
 
 		gmCfgRead rd(bd);
 		std::map<String, String> par;
-		int err = rd.get(par);
+		int nn = rd.get(par);
+		//Serial.printf("nn=%d\n", nn);
+		if ( nn > 0 ){
+			//for ( std::map<String, String>::const_iterator it = par.begin(); it != par.end(); ++it ){
+			//	String out = String("[") + it->first + "]=[" + it->second + "]";
+			//	Serial.println(out);
+			//}
+
+			String dl = par["delay"];
+			if ( dl.length() > 0 ){
+				toDelay = dl.toInt();
+				Serial.printf("param delay: %d\n", toDelay);
+			}
+		}
 
 /*    
     if ( http.begin(client, url) ){  // HTTP
@@ -221,6 +229,6 @@ void loop()
 	//Serial.println(vcc);
 
 
-	delay(10000);
+	delay(toDelay);
 
 }// loop

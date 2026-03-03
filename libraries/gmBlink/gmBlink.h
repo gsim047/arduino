@@ -31,7 +31,9 @@ public:
 	static int defN(const char *pin);
 	static bool defInv(int N);
 
-	void bl(int tim) const;
+	void up() const;
+	void down() const;
+	void blink(int tim) const;
 
 public:
 	int n;

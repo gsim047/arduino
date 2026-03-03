@@ -39,7 +39,7 @@ bool gmBlink::defInv(int N)
 }// gmBlink::defInv
 
 
-void gmBlink::bl(int tim) const
+void gmBlink::blink(int tim) const
 {
 	if ( !ni ){
 		pinMode(n, OUTPUT);
@@ -49,6 +49,28 @@ void gmBlink::bl(int tim) const
 	int low = (inv ? HIGH : LOW);
 	digitalWrite(n, high);
 	delay(tim);
-	digitalWrite(n, low);    // turn the LED off by making the voltage LOW
-}//
+	digitalWrite(n, low);
+}// gmBlink::blink
+
+
+void gmBlink::up() const
+{
+	if ( !ni ){
+		pinMode(n, OUTPUT);
+		ni = true;
+	}
+	int high = (inv ? LOW : HIGH);
+	digitalWrite(n, high);
+}// gmBlink::up
+
+
+void gmBlink::down() const
+{
+	if ( !ni ){
+		pinMode(n, OUTPUT);
+		ni = true;
+	}
+	int low = (inv ? HIGH : LOW);
+	digitalWrite(n, low);
+}// gmBlink::down
 
