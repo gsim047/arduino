@@ -3,15 +3,10 @@
 
 #include <Arduino.h>
 
-#include <ESP8266WiFi.h> 
-#include <ESP8266WiFiMulti.h>
-#include <ESP8266HTTPClient.h>
 
-#include <WiFiClient.h>
+void WiFi_connect();
+bool WiFi_check();
+String WiFi_macAddress();
 
-
-void WiFiConnect(ESP8266WiFiMulti &WiFiMulti);
-
-String callUrl(const char *url1);
 
 #endif // __gmNetTools_h

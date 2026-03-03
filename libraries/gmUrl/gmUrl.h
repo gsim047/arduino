@@ -5,6 +5,12 @@
 
 
 
+void WiFi_connect();
+bool WiFi_check();
+String WiFi_macAddress();
+
+
+
 class gmUrl {
 public:
 	gmUrl(const String &Url0) : url0(Url0) {};
