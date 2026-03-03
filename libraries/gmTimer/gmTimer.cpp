@@ -1,7 +1,7 @@
 #include <gmTimer.h>
 
 
-bool gmTimer::test()
+bool gmTimer::test() const
 {
 	uint32_t delta = millis() - tim;
 	if ( delta >= per ){

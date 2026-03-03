@@ -27,7 +27,9 @@ ESP8266WiFiMulti WiFiMulti;
 int n = 0;
 
 gmBlink bl;
-gmUrl url("http://192.168.1.201/esp/set1.php");
+gmUrl url("http://192.168.1.201/esp/set.php");
+
+gmTimer tim(100);
 
 //int ledN = LED_BUILTIN;
 //int ledINV = 1;
@@ -226,6 +228,10 @@ void loop()
   }
 
 	Serial.println(n);
+	int i1 = 0;
+	if ( tim ){
+		i1 = 1;
+	}
 	//Serial.println(vcc);
 
 

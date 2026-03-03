@@ -8,7 +8,9 @@ class gmTimer {
 public:
 	gmTimer(int t) : tim(millis()), per(t) {}
 
-	bool test();
+	operator bool () const { return test(); }
+	bool operator!() const { return !test(); }
+	bool test() const;
 
 public:
 	mutable uint32_t tim;
