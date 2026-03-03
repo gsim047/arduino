@@ -22,6 +22,7 @@
 #include <gmNetTools.h>
 #include <gmUrl.h>
 #include <gmTimer.h>
+#include <gmCfgRead.h>
 
 //void setup(){ Serial.begin(115200); Serial.println(); Serial.print("ESP Board MAC Address: "); Serial.println(WiFi.macAddress()); } void loop(){ }
 
@@ -178,6 +179,11 @@ void loop()
 		String res;
 		int code = url.call(res);  //
 		Serial.println(res);
+		String bd = gmUrl::extract(res, "<pre>", "</pre>");
+
+		gmCfgRead rd(bd);
+		std::map<String, String> par;
+		int err = rd.get(par);
 
 /*    
     if ( http.begin(client, url) ){  // HTTP
