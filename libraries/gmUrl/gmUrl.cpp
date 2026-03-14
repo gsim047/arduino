@@ -30,7 +30,7 @@ void WiFi_connect()
 		return;
 	}
 	WiFi.mode(WIFI_STA);
-	WiFiMulti.addAP(ssid, psw);
+	WiFiMulti.addAP(wifi_ssid, wifi_psw);
 }// WiFi_connect
 
 
@@ -142,6 +142,48 @@ int gmUrl::call(String &res)
 	}else{
 		Serial.println("[HTTP] Unable to connect");
 		res = "[HTTP] Unable to connect";
+		ret = 2;
+	}
+	return ret;
+}// gmUrl::call
+
+
+int gmUrl::call()
+{
+	int ret = 0;
+
+	WiFiClient client;
+	HTTPClient http;
+
+	String url = get();
+    //Serial.printf("to call => [%s]\n", url.c_str());
+
+	if ( http.begin(client, url) ){  // HTTP
+
+		Serial.print("[HTTP] GET...\n");
+		int httpCode = http.GET();
+
+		// httpCode will be negative on error
+		if ( httpCode > 0 ){
+			// HTTP header has been send and Server response header has been handled
+			Serial.printf("[HTTP] GET... code: %d\n", httpCode);
+
+			// file found at server
+			if ( httpCode == HTTP_CODE_OK || httpCode == HTTP_CODE_MOVED_PERMANENTLY ){
+				Serial.println("done..");
+				String payload = http.getString();
+			}
+		}else{
+			//Serial.printf("[HTTP] GET... failed, error: %s\n", http.errorToString(httpCode).c_str());
+			//res = http.errorToString(httpCode);
+			ret = 1;
+		}
+
+		http.end();
+
+	}else{
+		Serial.println("[HTTP] Unable to connect");
+		//res = "[HTTP] Unable to connect";
 		ret = 2;
 	}
 	return ret;

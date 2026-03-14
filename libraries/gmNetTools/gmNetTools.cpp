@@ -30,7 +30,7 @@ void WiFi_connect()
 		return;
 	}
 	WiFi.mode(WIFI_STA);
-	WiFiMulti.addAP(ssid, psw);
+	WiFiMulti.addAP(wifi_ssid, wifi_psw);
 }// WiFi_connect
 
 

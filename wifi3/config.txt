@@ -1,0 +1,9 @@
+cfgfile: /var/www/html/esp/cfg/esp.cfg<br/>
+Data:<br/>-[--<br/><pre>
+# comment 1
+
+key1=1
+key222=ksdhkdsj
+key3=o4yh^ 09etoret # test
+
+</pre><br/>-]--<br/>
