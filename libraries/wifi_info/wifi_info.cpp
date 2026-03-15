@@ -2,7 +2,7 @@
 
 
 static char ssid1[32] = { "HomeAsus87U" };
-static char psw1[32]  = { "atlana8312" };
+static char psw1[32]  = { "***" };
 
 static char ssid2[32] = { "HomeAsus_X" };
 //char psw2[32]  = { "***" };

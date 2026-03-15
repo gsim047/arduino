@@ -17,7 +17,9 @@ printf("vcc:[$arg]<br/>\n");
 
 $pth = realpath(dirname(__FILE__)) . "/"; //"/esp/";
 $log = $pth . $datd . ".log";
-printf("logfile: $log<br/>\n");
+printf("logfile: $datd.log<br/>\n");
+
+$mac = "";
 
 $fo = fopen($log, "at+");
 if ( $fo ){
@@ -25,6 +27,9 @@ if ( $fo ){
 	foreach ( $_REQUEST as $key => $value ){
 		printf("$key:[$value]<br/>\n");
 		$buf = $buf . "$key:[$value] ";
+		if ( $key == "mac" ){
+			$mac = $value;
+		}
 	}
 	fwrite($fo, "$datt ip:[$adr] $buf\n");
 //	fwrite($fo, "tm=$datt ip=$adr vcc=$arg\n");
@@ -34,12 +39,32 @@ if ( $fo ){
 printf("<br/><br/><br/>");
 
 $cfg = $pth . "esp.cfg";
-printf("cfgfile: $cfg<br/>\n");
+//printf("cfgfile: $cfg<br/>\n");
+if ( !file_exists($cfg) ){
+	$file = fopen($cfg, "w+");
+	fclose($file);
+}
 
 $cfgip = $pth . $adr . ".cfg";
-printf("ipfile: $cfgip<br/>\n");
+//printf("ipfile: $cfgip<br/>\n");
+if ( !file_exists($cfgip) ){
+	$file = fopen($cfgip, "w+");
+	fclose($file);
+}
 
-$str = file_get_contents($cfg) . "\n" . file_get_contents($cfgip);
+$str = file_get_contents($cfg) . "\ndate=" . $datd . "\ntime=" . $datt . "\n" . file_get_contents($cfgip);
+
+if ( $mac != "" ){
+	$cfgmac = $pth . $mac . ".cfg";
+	//printf("ipfile: $cfgip<br/>\n");
+	if ( !file_exists($cfgmac) ){
+		$file = fopen($cfgmac, "w+");
+		fwrite($file, "# ip=$adr\n\n");
+		fclose($file);
+	}
+
+	$str = $str . "\n" . file_get_contents($cfgmac);
+}
 
 printf("Cfg:<br/>-[--<br/>");
 printf("<pre>\n");

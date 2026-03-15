@@ -15,7 +15,12 @@ $datt = date("H:i:s");
 
 $pth = realpath(dirname(__FILE__)) . "/";
 $log = $pth . $datd . ".log";
-printf("logfile: $log<br/>\n");
+printf("logfile: $datd.log<br/>\n");
+
+if ( !file_exists($log) ){
+	$file = fopen($log, "w+");
+	fclose($file);
+}
 
 $str = file_get_contents($log);
 printf("Data:<br/><br/>");

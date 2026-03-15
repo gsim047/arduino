@@ -15,8 +15,8 @@
 //#endif 
 
 // to define:
-//  char ssid[];
-//  char psw[];
+//  char *wifi_ssid;
+//  char *wifi_psw;
 #include <wifi_info.h>
 
 
