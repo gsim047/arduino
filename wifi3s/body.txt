@@ -1,0 +1,7 @@
+
+# comment 1
+
+key1=1
+key222=ksdhkdsj
+key3=o4yh^ 09etoret # test
+
