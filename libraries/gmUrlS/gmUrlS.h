@@ -9,8 +9,8 @@
 
 class gmUrlS {
 public:
-	gmUrlS(const String &Url0) : url0(Url0), url1("/"), port(443), fp(NULL) {};
-	gmUrlS(const String &Url0, const String &Url1, int Port = 443) : url0(Url0), url1(Url1), port(Port), fp(NULL) {};
+	gmUrlS(const String &Url0) : fp(NULL) { slice(Url0, url0, url1, port); };
+//	gmUrlS(const String &Url0, const String &Url1, int Port = 443) : url0(Url0), url1(Url1), port(Port), fp(NULL) {};
 	gmUrlS(const gmUrlS &src) : url0(src.url0), url1(src.url1), port(src.port), fp(src.fp), param(src.param) {}
 
 	gmUrlS &operator=(const gmUrlS &src){
@@ -34,6 +34,7 @@ public:
 	static bool WiFi_check();
 	static String WiFi_macAddress();
 
+	bool slice(const String &url, String &u1, String &u2, int &prt);
 
 public:
 	String url0;  // https://server.ru or http://192.168.1.10

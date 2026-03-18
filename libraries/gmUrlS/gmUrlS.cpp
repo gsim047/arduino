@@ -24,6 +24,7 @@
 
 
 static ESP8266WiFiMulti WiFiMulti;
+static String myMac = "";
 
 
 void gmUrlS::WiFi_connect()
@@ -39,6 +40,7 @@ void gmUrlS::WiFi_connect()
 bool gmUrlS::WiFi_check()
 {
 	if ( (WiFiMulti.run() != WL_CONNECTED) ){
+		myMac = "";
 		WiFi_connect();
 	}
 
@@ -48,7 +50,9 @@ bool gmUrlS::WiFi_check()
 
 String gmUrlS::WiFi_macAddress()
 {
-	return WiFi.macAddress();
+	if ( myMac == "" )
+		myMac = WiFi.macAddress();
+	return myMac;
 }// gmUrlS::WiFi_macAddress
 
 
@@ -185,3 +189,59 @@ String gmUrlS::extract(const String &res, const String &s1, const String &s2)
 	}
 	return body;
 }// gmUrlS::extract
+
+
+bool gmUrlS::slice(const String &url, String &u1, String &u3, int &prt)  // https://gsim047.ru:443/esp/set.php
+{
+	String u = url; // buf
+	String u0 = ""; // http:// https://
+	//String u1 = ""; // gsim047.ru
+	String u2 = ""; // :443
+	//String u3 = ""; // /esp/set.php
+
+	int pos = u.indexOf("//");
+	if ( pos >= 0 ){
+		u0 = u.substring(0, pos+2);    // https://
+		u = u.substring(pos+2);        // gsim047.ru:443/esp/set.php
+	}
+
+	int pos1 = u.indexOf(":");
+	if ( pos1 >= 0 ){
+		u1 = u.substring(0, pos1);     // gsim047.ru
+		u = u.substring(pos1+1);       // :443/esp/set.php
+
+		int pos2 = u.indexOf("/");
+		if ( pos2 >= 0 ){
+			u2 = u.substring(0, pos2); // 443
+			u = u.substring(pos2+1);   // /esp/set.php
+		}else{                         // gsim047.ru:443
+			u2 = u.substring(0);       // 443
+			u = "";
+		}
+	}else{                             // gsim047.ru/esp/set.php
+		int pos2 = u.indexOf("/");
+		if ( pos2 >= 0 ){              // gsim047.ru/esp/set.php
+			u1 = u.substring(0, pos2);
+			u2 = "443";
+			u3 = u.substring(pos2);
+		}else{                         // gsim047.ru
+			u1 = u;
+			u2 = "443";
+			u3 = "/";
+		}
+	}
+
+	pos = u3.indexOf("?");
+	if ( pos >= 0 ){
+		u3 = u3.substring(0, pos);
+	}
+
+	//Serial.println("url: " + url);
+	//Serial.println("u0: " + u0);
+	//Serial.println("u1: " + u1);
+	//Serial.println("u2: " + u2);
+	//Serial.println("u3: " + u3);
+	prt = u2.toInt();
+
+	return true;
+}// gmUrlS::slice

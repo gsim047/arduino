@@ -16,7 +16,8 @@
 int n = 0;
 
 gmBlink bl;
-gmUrl url("http://192.168.1.201/esp/set.php");
+//gmUrl url("http://192.168.1.201/esp/set.php");
+gmUrl url("https://gsim047.ru/esp/set.php");
 
 gmTimer tim(100);
 
@@ -48,7 +49,7 @@ void setup()
 		delay(1000);
 	}
 
-	WiFi_connect();
+	gmUrl::WiFi_connect();
 }// setup
 
 
@@ -58,7 +59,7 @@ int toDelay = 10000;
 
 void loop() 
 {
-	if ( WiFi_check() ){
+	if ( gmUrl::WiFi_check() ){
 
 		bl.blink(200);
 		//Serial.printf(WiFiMulti.);
@@ -68,7 +69,7 @@ void loop()
 
 		url.clear();
 		if ( n == 0 ){
-			String mac = WiFi_macAddress();
+			String mac = gmUrl::WiFi_macAddress();
 			url.set("dat", "init");
 			url.set("mac", mac);
 			//sprintf(url, "/esp/set1.php?dat=init&mac=%s", mac.c_str());
