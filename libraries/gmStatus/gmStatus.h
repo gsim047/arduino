@@ -13,7 +13,7 @@ public:
 		if ( this != &src ){
 			st = src.st; lst = st; mcnt = src.mcnt; ccnt = 0; chgt = 0;
 		}
-		return *his;
+		return *this;
 	}
 
 	operator int() const { return st; }
