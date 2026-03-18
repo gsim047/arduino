@@ -2,6 +2,9 @@
 //#include <OneWire.h>
 //#include <DallasTemperature.h>
 
+// KY-024 датчик Холла
+
+// D2 - 2
 #define DPIN 4
 // A0 - 17
 #define APIN A0

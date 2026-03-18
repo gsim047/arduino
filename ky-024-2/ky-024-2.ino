@@ -1,7 +1,7 @@
 #include <Arduino.h>
 //#include <OneWire.h>
 //#include <DallasTemperature.h>
-#include <gmUrl.h>
+#include <gmUrlS.h>
 #include <wifi_info.h>
 
 
@@ -12,7 +12,7 @@
 int n = 0;
 float last = 0.;
 
-gmUrl url("https://gsim047.ru/esp/set.php");
+gmUrlS url("https://gsim047.ru/esp/set.php");
 
 
 
@@ -25,13 +25,13 @@ void setup()
   
 	Serial.println("\nStart!");
 	n = 1;
-	WiFi_connect();
+	url.WiFi_connect();
 }// setup
 
 
 void loop() 
 {
-	if ( !WiFi_check() ){
+	if ( !url.WiFi_check() ){
 		delay(500);
 		return;
 	}
@@ -48,13 +48,14 @@ void loop()
 	if ( dl >= 5. ){
 		Serial.printf("%d: %d %.0f\n", n, dres, ares);
 
+		url.clear();
 		url.set("n", n);
-		url.set("mac", WiFi_macAddress());
+		url.set("mac", url.WiFi_macAddress());
 		url.set("d", dres);
 		url.set("a", ares);
 
-		String res;
-		int ret = url.call(res);
+		//String res;
+		int ret = url.call(); //res);
 	}
 
 	n++;

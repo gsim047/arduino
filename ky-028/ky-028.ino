@@ -2,6 +2,9 @@
 //#include <OneWire.h>
 //#include <DallasTemperature.h>
 
+// KY-028 датчик температуры
+
+// D2 - 4
 #define DPIN 4
 // A0 - 17
 #define APIN A0
@@ -26,5 +29,5 @@ void loop()
 //	ds.requestTemperatures(); // считывание значение температуры
 	Serial.printf("%d %f\n", dres, ares);
 
-	delay(500);
+	delay(1000);
 }// loop

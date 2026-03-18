@@ -9,7 +9,7 @@
 // геркон:
 //  нога 1 - на GND
 //  нога 2 - на D2
-//  нога 2 - через резистор 10 кОм на 5В
+//  нога 2 - через резистор 10 кОм на 5В  -- no need
 
 const int pin = 4; // GPIO4 - это пин D2 на Wemos D1 Mini/NodeMCU
 //static int state = LOW;
@@ -22,15 +22,13 @@ gmUrlS url("https://gsim047.ru/esp/set.php");
 
 void setup() 
 {
-	Serial.begin(115200);
 	// Используем встроенный резистор подтяжки к 3.3V
 	pinMode(pin, INPUT_PULLUP);
 	bl.blink(200);
 	n = 0;
 
-	Serial.println();
-	Serial.println();
-	Serial.println();
+	Serial.begin(115200);
+	Serial.printf("\n\n\n");
 
 	for ( int t = 4; t > 0; t-- ){
 		Serial.printf("[SETUP] WAIT %d...\n", t);
@@ -39,7 +37,7 @@ void setup()
 	}
 
 	url.fp = fingerprint_gsim047_ru;
-	gmUrlS::WiFi_connect();
+	url.WiFi_connect();
 }// setup
 
 
@@ -47,11 +45,11 @@ int toDelay = 10000;
 
 void exec(const String &txt)
 {
-	if ( !gmUrlS::WiFi_check() )
+	if ( !url.WiFi_check() )
 		return;
 
    	url.clear();
-	String mac = gmUrlS::WiFi_macAddress();
+	String mac = url.WiFi_macAddress();
    	url.set("mac", mac);
    	url.set("txt", txt);
    	n++;
@@ -59,7 +57,7 @@ void exec(const String &txt)
    	String res;
    	int code = url.call(res);  //
    	//Serial.println(res);
-   	String bd = gmUrlS::extract(res, "<pre>", "</pre>");
+   	String bd = url.extract(res, "<pre>", "</pre>");
    	Serial.println(bd);
 
    	gmCfgRead rd(bd);
