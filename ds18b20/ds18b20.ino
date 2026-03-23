@@ -13,8 +13,9 @@ void setup()
 
 	Serial.print("Found ");
 	Serial.print(ds.getDeviceCount(), DEC);
-	Serial.println(" devices.");
-}
+	Serial.println(" device(s).");
+}// setup
+
 
 void loop() 
 {
@@ -25,7 +26,7 @@ void loop()
 	Serial.println( "C");
  
 	delay(10000);
-}
+}// loop
 
 /*
 //#define ONE_WIRE_BUS 5 // вывод, к которому подключён DS18B20

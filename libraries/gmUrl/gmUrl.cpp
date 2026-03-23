@@ -24,30 +24,30 @@
 static ESP8266WiFiMulti WiFiMulti;
 
 
-void WiFi_connect()
+void gmUrl::WiFi_connect()
 {
 	if ( (WiFiMulti.run() == WL_CONNECTED) ){
 		return;
 	}
 	WiFi.mode(WIFI_STA);
 	WiFiMulti.addAP(wifi_ssid, wifi_psw);
-}// WiFi_connect
+}// gmUrl::WiFi_connect
 
 
-bool WiFi_check()
+bool gmUrl::WiFi_check()
 {
 	if ( (WiFiMulti.run() != WL_CONNECTED) ){
 		WiFi_connect();
 	}
 
 	return (WiFiMulti.run() == WL_CONNECTED);
-}// WiFi_check
+}// gmUrl::WiFi_check
 
 
-String WiFi_macAddress()
+String gmUrl::WiFi_macAddress()
 {
 	return WiFi.macAddress();
-}// WiFi_macAddress
+}// gmUrl::WiFi_macAddress
 
 
 

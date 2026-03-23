@@ -5,10 +5,6 @@
 
 
 
-void WiFi_connect();
-bool WiFi_check();
-String WiFi_macAddress();
-
 
 
 class gmUrl {
@@ -32,6 +28,10 @@ public:
 	int call(String &res);      // ret errorcode & result of curl
 	int call();                 // ret errorcode
 	static String extract(const String &res, const String &s1, const String &s2);
+
+	static void WiFi_connect();
+	static bool WiFi_check();
+	static String WiFi_macAddress();
 
 
 public:
