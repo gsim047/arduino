@@ -5,10 +5,14 @@
   *  Модифицирован Георгий Степанов (Georgiy Stepanov / gsim047)
 */
 
+#include "gmUrl.h"
  
 int led = 0;                 // контакт для светодиода
 int sensor = 4;              // контакт для датчика
 int state = LOW;             // по умолчанию никакого движения не определено
+
+gmUrl url("http://192.168.1.201/esp/move.php");
+
 
 
 void setup() 
@@ -17,6 +21,8 @@ void setup()
 	pinMode(sensor, INPUT);    // контакт для датчика 
 	Serial.begin(115200);      // инициализируем последовательную коммуникацию
 	digitalWrite(led, LOW);
+
+	url.WiFi_connect();
 }// setup
 
 
@@ -25,10 +31,11 @@ void loop()
 	int val = digitalRead(sensor);     // считываем данные от датчика
 	
 	if ( val != state ){
-		if ( val == HIGH )
+		if ( val == HIGH ){
 			Serial.println("Motion detected!");  //  "Замечено движение!"
-		else
+		}else{
 			Serial.println("Motion stopped!"); //  "Движение прекращено!"
+		}
 	}
 
 	if ( val == HIGH ){
