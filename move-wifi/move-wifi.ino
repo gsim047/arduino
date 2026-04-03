@@ -1,16 +1,15 @@
-/*  
-  *  Использование датчика движения типа PIR с платой Arduino.
-  *  Более подробно о проекте на:  randomnerdtutorials.com/pirsensor
-  *  Модифицирован Руи Сантосом (Rui Santos) на основе скетча Лимор Фрид (Limor Fried)
-  *  Модифицирован Георгий Степанов (Georgiy Stepanov / gsim047)
-*/
+// PIR HC-SR501
+// https://voltiq.ru/arduino-and-sensor-hc-sr501/
 
-#include "gmUrl.h"
+#include <gmBlink.h>
+#include <gmUrl.h>
  
-int led = 0;                 // контакт для светодиода
-int sensor = 4;              // контакт для датчика
-int state = LOW;             // по умолчанию никакого движения не определено
+int led = 2;                   // контакт для светодиода
+int sensor = 4;                // контакт для датчика
+int state = LOW;               // по умолчанию никакого движения не определено
 
+int n = 0;
+gmBlink ld(led);
 gmUrl url("http://192.168.1.201/esp/move.php");
 
 
@@ -22,31 +21,62 @@ void setup()
 	Serial.begin(115200);      // инициализируем последовательную коммуникацию
 	digitalWrite(led, LOW);
 
+	ld.down();
+
+	Serial.printf("\n\n\n");
+	for ( int t = 4; t > 0; t-- ){
+		Serial.printf("[SETUP] WAIT %d...\n", t);
+		Serial.flush();
+		delay(1000);
+	}
+
 	url.WiFi_connect();
 }// setup
 
 
+bool exec(const String &txt)
+{
+	if ( !url.WiFi_check() )
+		return false;
+
+   	url.clear();
+	String mac = url.WiFi_macAddress();
+   	url.set("mac", mac);
+   	url.set("event", txt);
+   	n++;
+
+   	String res;
+   	int code = url.call(res);  //
+    return (code == 200);
+}// exec
+
+
 void loop()
 {
+	n++;
 	int val = digitalRead(sensor);     // считываем данные от датчика
 	
 	if ( val != state ){
+		String msg;
 		if ( val == HIGH ){
-			Serial.println("Motion detected!");  //  "Замечено движение!"
+			msg = "MotionAlarm";
 		}else{
-			Serial.println("Motion stopped!"); //  "Движение прекращено!"
+			msg = "MotionStop";
 		}
+		Serial.printf("%d %s\n", n, msg.c_str());
+		int res = exec(msg);
 	}
 
 	if ( val == HIGH ){
-		digitalWrite(led, HIGH);   // включаем светодиод
+		ld.up();
 		delay(100);
 
-		digitalWrite(led, LOW);    // выключаем светодиод
+		ld.down();
 		delay(400);
 	}else{
-		digitalWrite(led, LOW);    // выключаем светодиод
+		ld.down();
 	}
 	delay(100);
 	state = val;
+	//Serial.printf("n=%d state=%d val=%d\n", n, state, val);
 }// loop

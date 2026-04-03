@@ -43,10 +43,10 @@ void setup()
 
 int toDelay = 10000;
 
-void exec(const String &txt)
+bool exec(const String &txt)
 {
 	if ( !url.WiFi_check() )
-		return;
+		return false;
 
    	url.clear();
 	String mac = url.WiFi_macAddress();
@@ -71,6 +71,7 @@ void exec(const String &txt)
    			Serial.printf("param delay: %d\n", toDelay);
    		}
    	}
+    return true;
 }// exec
 
 

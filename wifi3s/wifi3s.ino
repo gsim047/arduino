@@ -35,7 +35,6 @@ void setup()
 	n = 0;
 
 	Serial.printf("\n\n\n");
-
 	for ( int t = 4; t > 0; t-- ){
 		Serial.printf("[SETUP] WAIT %d...\n", t);
 		Serial.flush();
