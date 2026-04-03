@@ -1,9 +1,8 @@
 #!/bin/bash
 
-MODEL=`cat /home/user/bin/esp_model.txt`
+MODEL=esp8266:esp8266:generic
+#CMD=/home/user/bin/arduino-cli
+CMD=arduino-cli
 
-echo arduino-cli compile ...
-echo model $MODEL
-#arduino-cli compile -b esp8266:esp8266:generic $1
-#arduino-cli -v compile -e -b $MODEL $1
-arduino-cli compile -b $MODEL $1
+$CMD compile -b $MODEL $1 $2 $3 $4 $5 $6 $7
+
