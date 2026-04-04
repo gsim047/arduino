@@ -9,10 +9,10 @@
 
 void ledx(int lev1, int lev2, int tim)
 {
-  digitalWrite(LED_BUILTIN, lev1);   // turn the LED on (HIGH is the voltage level)
-  delay(tim);                       // wait for a second
-  digitalWrite(LED_BUILTIN, lev2);    // turn the LED off by making the voltage LOW
-}
+	digitalWrite(LED_BUILTIN, lev1);   // turn the LED on (HIGH is the voltage level)
+	delay(tim);                       // wait for a second
+	digitalWrite(LED_BUILTIN, lev2);    // turn the LED off by making the voltage LOW
+}// 
 
 
 int lev1 = HIGH;
@@ -21,7 +21,7 @@ int lev2 = LOW;
 #define  SENSOR      A0
 
 
-const char* ssid = "HomeAsus_2";
+const char* ssid = "HomeAsus_X";
 const char* password = "atlana8312";
 //const char* url = "192.168.2.107/datt.php";
 
@@ -70,34 +70,33 @@ void nk_deepsleep(uint32 time_us) {
 // the setup function runs once when you press reset or power the board
 void setup() 
 {
-  char buf[256];
-  Serial.begin(74880);
-  Serial.setTimeout(2000);
+	char buf[256];
+	Serial.begin(115200);
+	Serial.setTimeout(2000);
 
-  Serial.println("\n\nwake up");
+	Serial.println("\n\nwake up");
 
-  // initialize digital pin LED_BUILTIN as an output.
-  pinMode(LED_BUILTIN, OUTPUT);
-  //pinMode(D0, WAKEUP_PULLUP);
+	// initialize digital pin LED_BUILTIN as an output.
+	pinMode(LED_BUILTIN, OUTPUT);
+	//pinMode(D0, WAKEUP_PULLUP);
 
-  Serial.println("send call...");
-  if ( 1 ){
-    lev1 = LOW;
-    lev2 = HIGH;
-  }
-//  Serial.println("3");
+	Serial.println("send call...");
+	if ( 1 ){
+		lev1 = LOW;
+		lev2 = HIGH;
+	}
 
-  WiFi.mode(WIFI_STA);
-  WiFi.begin(ssid, password);
+	WiFi.mode(WIFI_STA);
+	WiFi.begin(ssid, password);
 
-  while (WiFi.status() != WL_CONNECTED) {
-    delay(500);
-    Serial.print(".");
-  }
-  Serial.println("");
-  Serial.println("WiFi connected");
-  Serial.println("IP address: ");
-  Serial.println(WiFi.localIP());
+	while (WiFi.status() != WL_CONNECTED) {
+		delay(500);
+		Serial.print(".");
+	}
+	Serial.println("");
+	Serial.println("WiFi connected");
+	Serial.println("IP address: ");
+	Serial.println(WiFi.localIP());
 
 //  WiFiUDP udp;
   // Время в миллисекундах (NTPClient(udp, "pool.ntp.org", offset_sec, interval_ms))
@@ -110,18 +109,18 @@ void setup()
 //  timeClient.update(); // Обновляем время
 //  Serial.println(timeClient.getFormattedTime());
   
-  uint16_t sensor = analogRead(SENSOR);    // Читаем данные с датчика,
+	uint16_t sensor = analogRead(SENSOR);    // Читаем данные с датчика,
 
-  sprintf(buf, "http://192.168.2.107/datt.php?dat=%d", sensor);
-  Serial.print("dat: [");
-  Serial.print(buf);
-  Serial.println("]");
+	sprintf(buf, "http://192.168.1.201/set.php?dat=%d", sensor);
+	Serial.print("dat: [");
+	Serial.print(buf);
+	Serial.println("]");
 
-    WiFiClient client;
-    HTTPClient http;
-    if ( http.begin(client, buf) ){  // HTTP
+	WiFiClient client;
+	HTTPClient http;
+	if ( http.begin(client, buf) ){  // HTTP
 
-      int httpCode = http.GET();
+		int httpCode = http.GET();
 
       // httpCode will be negative on error
       //if (httpCode > 0) {
@@ -137,23 +136,23 @@ void setup()
       //  Serial.printf("[HTTP] GET... failed, error: %s\n", http.errorToString(httpCode).c_str());
       //}
 
-      http.end();
-      //Serial.println("done");
-    }
+		http.end();
+		//Serial.println("done");
+	}
   
-  ledx(lev1, lev2, 200);
-  //delay(200);                       // wait for a second
-  //ledx(lev1, lev2, 200);
-  delay(1000);                       // wait for a second
-  Serial.println("...sleeeeep...");
+	ledx(lev1, lev2, 200);
+	//delay(200);                       // wait for a second
+	//ledx(lev1, lev2, 200);
+	delay(1000);                       // wait for a second
+	Serial.println("...sleeeeep...");
 
-  ESP.deepSleep(3600 * 1000000);
-  //nk_deepsleep(10000000);
-  //Serial.println("5");
-  delay(10);
-  //Serial.println("6");
+	ESP.deepSleep(3600 * 1000000);
+	//nk_deepsleep(10000000);
+	//Serial.println("5");
+	delay(10);
+	//Serial.println("6");
 
-}
+}// setup
 
 
 // the loop function runs over and over again forever
@@ -173,4 +172,4 @@ void loop()
   delay(200);                       // wait for a second
   digitalWrite(LED_BUILTIN, lev2);    // turn the LED off by making the voltage LOW
   delay(1000); */                      // wait for a second
-}
+}// loop

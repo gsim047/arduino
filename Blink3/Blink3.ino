@@ -29,6 +29,5 @@ void loop()
 	delay(500);
 	n++;
 	int vcc = ESP.getVcc();
-	Serial.println(n);
-	Serial.println(vcc);
+	Serial.printf("%d: %d\n", n, vcc);
 }// loop

@@ -42,6 +42,8 @@ void setup()
 
 
 int toDelay = 10000;
+String name = "";
+
 
 bool exec(const String &txt)
 {
@@ -52,6 +54,9 @@ bool exec(const String &txt)
 	String mac = url.WiFi_macAddress();
    	url.set("mac", mac);
    	url.set("txt", txt);
+    if ( name.length() > 0 ){
+    	url.set("name", name);
+    }
    	n++;
 
    	String res;
@@ -70,6 +75,10 @@ bool exec(const String &txt)
    			toDelay = dl.toInt();
    			Serial.printf("param delay: %d\n", toDelay);
    		}
+        String nm = par["name"];
+        if ( nm.length() > 0 ){
+        	name = nm;
+        }
    	}
     return true;
 }// exec

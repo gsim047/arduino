@@ -14,7 +14,7 @@ void setup()
 
 void loop() 
 {
-	b.bl(50);
+	b.blink(50);
 	delay(500);
 //  digitalWrite(LED_BUILTIN, HIGH);   // turn the LED on (HIGH is the voltage level)
 //  delay(1000);                       // wait for a second
