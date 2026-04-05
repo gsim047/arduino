@@ -1,6 +1,8 @@
 #include <Arduino.h>
 
-#define DPIN 4
+//#define DPIN 4
+int pin = 4;   // D2
+int led = 2;   // BUILTIN 
 
 int n = 0;
 
@@ -8,8 +10,10 @@ int n = 0;
 void setup() 
 {
 	Serial.begin(115200);
-	pinMode(DPIN, OUTPUT);
-	digitalWrite(DPIN, LOW);
+	pinMode(led, OUTPUT);
+	digitalWrite(pin, HIGH);
+	pinMode(pin, OUTPUT);
+	digitalWrite(pin, LOW);
   
     n = 0;
 	Serial.println("\nStart!");
@@ -18,12 +22,14 @@ void setup()
 
 void loop() 
 {
-	digitalWrite(DPIN, HIGH);
+	digitalWrite(pin, HIGH);
+	digitalWrite(led, LOW);
 	delay(4000);
-	digitalWrite(DPIN, LOW);
+	digitalWrite(pin, LOW);
+	digitalWrite(led, HIGH);
 
 	n++;
-	Serial.printf("%d\n", n);
+	Serial.println(n);
 
 	delay(4000);
-}
+}// loop
