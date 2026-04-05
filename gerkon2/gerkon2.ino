@@ -1,5 +1,7 @@
 #include <Arduino.h>
 #include <gmStatus.h>
+#include <gmFn.h>
+#include <gmBlink.h>
 
 // геркон:
 //  нога 1 - на GND
@@ -9,13 +11,16 @@
 const int pin = 4; // GPIO4 - это пин D2 на Wemos D1 Mini/NodeMCU
 //static int state = LOW;
 static gmStatus st(LOW, 5);
+gmBlink bl;        // BUILDIN - 
 
 
 void setup() 
 {
-	Serial.begin(115200);
+	//Serial.begin(115200);
 	// Используем встроенный резистор подтяжки к 3.3V
 	pinMode(pin, INPUT_PULLUP);
+	bl.down();
+	Serial_init();
 }// setup
 
 
@@ -26,8 +31,10 @@ void loop()
 		int s = st;
 		if ( st ){
 			Serial.println("open (magnet is far)");
+			bl.down();
 		}else{
 			Serial.println("closed (magnet is near)");
+			bl.up();
 		}
 	}
 

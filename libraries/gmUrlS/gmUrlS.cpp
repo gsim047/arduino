@@ -120,23 +120,23 @@ int gmUrlS::call(String &res)
 //	if ( https.begin(*client, url, gsim047_port) /*http.begin(client, url)*/ ){  // HTTP
 //	String adr = "/esp/set.php?dat=1233";
 //	Serial.printf("to call >> [%s] [%s]\n", gsim047_host, adr.c_str());
-	Serial.printf("to call >> [%s] [%s]\n", url0.c_str(), url.c_str());
+	if ( dbg ) Serial.printf("to call >> [%s] [%s]\n", url0.c_str(), url.c_str());
 //	if ( https.begin(*client, gsim047_host, gsim047_port, adr.c_str(), true) ){  // HTTPS
 	if ( https.begin(*client, url0.c_str(), port, url.c_str(), true) ){  // HTTPS
 
-		Serial.print("[HTTPS] GET...\n");
+		if ( dbg ) Serial.print("[HTTPS] GET...\n");
 		int httpCode = https.GET();
 
 		// httpCode will be negative on error
 		if ( httpCode > 0 ){
 			// HTTP header has been send and Server response header has been handled
-			Serial.printf("[HTTPS] GET... code: %d\n", httpCode);
+			if ( dbg ) Serial.printf("[HTTPS] GET... code: %d\n", httpCode);
 
 			// file found at server
 			if ( httpCode == HTTP_CODE_OK || httpCode == HTTP_CODE_MOVED_PERMANENTLY ){
-				Serial.println("done..");
+				if ( dbg ) Serial.println("done..");
 				String payload = https.getString();
-				Serial.println(payload);
+				if ( dbg ) Serial.println(payload);
 				//String body;
 				//int pos1 = payload.indexOf("<pre>");
 				//if ( pos1 > 0 ){
@@ -159,7 +159,7 @@ int gmUrlS::call(String &res)
 		https.end();
 
 	}else{
-		Serial.println("[HTTPS] Unable to connect");
+		if ( dbg ) Serial.println("[HTTPS] Unable to connect");
 		res = "[HTTPS] Unable to connect";
 		ret = 2;
 	}

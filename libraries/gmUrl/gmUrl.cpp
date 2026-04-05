@@ -105,17 +105,17 @@ int gmUrl::call(String &res)
 
 	if ( http.begin(client, url) ){  // HTTP
 
-		Serial.print("[HTTP] GET...\n");
+		if ( dbg ) Serial.print("[HTTP] GET...\n");
 		int httpCode = http.GET();
 
 		// httpCode will be negative on error
 		if ( httpCode > 0 ){
 			// HTTP header has been send and Server response header has been handled
-			Serial.printf("[HTTP] GET... code: %d\n", httpCode);
+			if ( dbg ) Serial.printf("[HTTP] GET... code: %d\n", httpCode);
 
 			// file found at server
 			if ( httpCode == HTTP_CODE_OK || httpCode == HTTP_CODE_MOVED_PERMANENTLY ){
-				Serial.println("done..");
+				if ( dbg ) Serial.println("done..");
 				String payload = http.getString();
 				//Serial.println(payload);
 				//String body;
@@ -140,7 +140,7 @@ int gmUrl::call(String &res)
 		http.end();
 
 	}else{
-		Serial.println("[HTTP] Unable to connect");
+		if ( dbg ) Serial.println("[HTTP] Unable to connect");
 		res = "[HTTP] Unable to connect";
 		ret = 2;
 	}
@@ -150,43 +150,8 @@ int gmUrl::call(String &res)
 
 int gmUrl::call()
 {
-	int ret = 0;
-
-	WiFiClient client;
-	HTTPClient http;
-
-	String url = get();
-    //Serial.printf("to call => [%s]\n", url.c_str());
-
-	if ( http.begin(client, url) ){  // HTTP
-
-		Serial.print("[HTTP] GET...\n");
-		int httpCode = http.GET();
-
-		// httpCode will be negative on error
-		if ( httpCode > 0 ){
-			// HTTP header has been send and Server response header has been handled
-			Serial.printf("[HTTP] GET... code: %d\n", httpCode);
-
-			// file found at server
-			if ( httpCode == HTTP_CODE_OK || httpCode == HTTP_CODE_MOVED_PERMANENTLY ){
-				Serial.println("done..");
-				String payload = http.getString();
-			}
-		}else{
-			//Serial.printf("[HTTP] GET... failed, error: %s\n", http.errorToString(httpCode).c_str());
-			//res = http.errorToString(httpCode);
-			ret = 1;
-		}
-
-		http.end();
-
-	}else{
-		Serial.println("[HTTP] Unable to connect");
-		//res = "[HTTP] Unable to connect";
-		ret = 2;
-	}
-	return ret;
+	String res;
+	return call(res);
 }// gmUrl::call
 
 

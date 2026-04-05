@@ -9,13 +9,13 @@
 
 class gmUrlS {
 public:
-	gmUrlS(const String &Url0) : fp(NULL) { slice(Url0, url0, url1, port); };
+	gmUrlS(const String &Url0) : fp(NULL), dbg(0) { slice(Url0, url0, url1, port); };
 //	gmUrlS(const String &Url0, const String &Url1, int Port = 443) : url0(Url0), url1(Url1), port(Port), fp(NULL) {};
-	gmUrlS(const gmUrlS &src) : url0(src.url0), url1(src.url1), port(src.port), fp(src.fp), param(src.param) {}
+	gmUrlS(const gmUrlS &src) : url0(src.url0), url1(src.url1), port(src.port), fp(src.fp), param(src.param), dbg(src.dbg) {}
 
 	gmUrlS &operator=(const gmUrlS &src){
 		if ( &src != this ){
-			url0 = src.url0; url1 = src.url1; port = src.port; fp = src.fp; param = src.param;
+			url0 = src.url0; url1 = src.url1; port = src.port; fp = src.fp; param = src.param; dbg = src.dbg;
 		}
 		return *this;
 	}
@@ -42,6 +42,7 @@ public:
 	int port;
 	const char* fp;
 	String param;
+	int dbg;
 };// class gmUrlS
 
 

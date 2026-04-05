@@ -9,12 +9,12 @@
 
 class gmUrl {
 public:
-	gmUrl(const String &Url0) : url0(Url0) {};
-	gmUrl(const gmUrl &src) : url0(src.url0), param(src.param) {}
+	gmUrl(const String &Url0) : url0(Url0), dbg(0) {};
+	gmUrl(const gmUrl &src) : url0(src.url0), param(src.param), dbg(src.dbg) {}
 
 	gmUrl &operator=(const gmUrl &src){
 		if ( &src != this ){
-			url0 = src.url0; param = src.param;
+			url0 = src.url0; param = src.param; dbg = src.dbg;
 		}
 		return *this;
 	}
@@ -38,6 +38,7 @@ public:
 	String url0;  // https://server.ru or http://192.168.1.10
 //	String url1;  // /data/set.php
 	String param;
+	int dbg;
 };// class gmUrl
 
 

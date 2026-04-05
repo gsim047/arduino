@@ -3,6 +3,7 @@
 
 #include <gmBlink.h>
 #include <gmUrl.h>
+#include <gmFn.h>
  
 int led = 2;                   // контакт для светодиода
 int sensor = 4;                // контакт для датчика
@@ -23,12 +24,14 @@ void setup()
 
 	ld.down();
 
+	Serial_init();
+	/*
 	Serial.printf("\n\n\n");
 	for ( int t = 4; t > 0; t-- ){
 		Serial.printf("[SETUP] WAIT %d...\n", t);
 		Serial.flush();
 		delay(1000);
-	}
+	}*/
 
 	url.WiFi_connect();
 }// setup
