@@ -17,10 +17,10 @@ gmUrl url("http://192.168.1.201/esp/move.php");
 
 void setup() 
 {
-	pinMode(led, OUTPUT);      // контакт для светодиода 
+	//pinMode(led, OUTPUT);      // контакт для светодиода 
 	pinMode(sensor, INPUT);    // контакт для датчика 
-	Serial.begin(115200);      // инициализируем последовательную коммуникацию
-	digitalWrite(led, LOW);
+	//Serial.begin(115200);      // инициализируем последовательную коммуникацию
+	//digitalWrite(led, LOW);
 
 	ld.down();
 
@@ -62,7 +62,7 @@ void loop()
 	if ( val != state ){
 		String msg;
 		if ( val == HIGH ){
-			msg = "MotionAlarm";
+			msg = "MotionAlarm!";
 		}else{
 			msg = "MotionStop";
 		}
