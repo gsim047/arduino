@@ -15,17 +15,17 @@ public:
 
 	gmCfgRead &operator=(const gmCfgRead &src){
 		if ( &src != this ){
-			data = src.data; pos = src.pos;
+			data = src.data; pos = src.pos; vals.clear();
 		}
 		return *this;
 	}
 
 	gmCfgRead &operator=(const String &src){
-		data = src; pos = 0;
+		data = src; pos = 0; vals.clear();
 		return *this;
 	}
 
-	void clear(){ pos = 0; }
+	void clear(){ pos = 0; vals.clear(); }
 
 	bool eof() const {
 		return pos >= data.length();
@@ -34,13 +34,18 @@ public:
 		return data.length();
 	}
 
+private:
 	String read();
 
+public:
 	int get(std::map<String, String> &param);
+	int get(const String &key, String &val);
+	int get(const String &key, int &val);
 
 public:
 	String data;
 	int pos;
+	std::map<String, String> vals;
 };// class gmCfgRead
 
 

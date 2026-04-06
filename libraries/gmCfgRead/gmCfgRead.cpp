@@ -46,33 +46,63 @@ String gmCfgRead::read()
 
 int gmCfgRead::get(std::map<String, String> &param)
 {
+//	int ret = 0;
+	if ( vals.empty() ){
+		while ( !eof() ){
+			String key, val;
+
+			String s = read();
+			//Serial.println(String("read s:[") + s + "]");
+			int pp0 = s.indexOf("#");
+			if ( pp0 >= 0 ){
+				s = s.substring(0, pp0);
+			}
+			s.trim();
+
+			if ( s.length() == 0 )
+				continue;
+
+			int pp1 = s.indexOf("=");
+			if ( pp1 > 0 ){
+				key = s.substring(0, pp1);
+				val = s.substring(pp1+1);
+				//Serial.println(String("get key/value: [") + key + "]=[" + val + "]");
+			}else{
+				key = s.substring(0, pp1);
+				val = "1";
+			}
+			vals[key] = val;
+			//ret++;
+		}
+	}
+	param = vals;
+	return vals.size();
+}// gmCfgRead::get
+
+
+int gmCfgRead::get(const String &key, String &val)
+{
 	int ret = 0;
-	while ( !eof() ){
-		String key, val;
-
-		String s = read();
-		//Serial.println(String("read s:[") + s + "]");
-		int pp0 = s.indexOf("#");
-		if ( pp0 >= 0 ){
-			s = s.substring(0, pp0);
-//			trim(s);
-		}
-		s.trim();
-
-		if ( s.length() == 0 )
-			continue;
-
-		int pp1 = s.indexOf("=");
-		if ( pp1 > 0 ){
-			key = s.substring(0, pp1);
-			val = s.substring(pp1+1);
-			//Serial.println(String("get key/value: [") + key + "]=[" + val + "]");
-		}else{
-			key = s.substring(0, pp1);
-			val = "1";
-		}
-		param[key] = val;
-		ret++;
+	std::map<String, String> param;
+	get(param);
+	std::map<String, String>::const_iterator it = param.find(key);
+	if ( it != param.end() ){
+		val = it->second;
+		ret = 1;
 	}
 	return ret;
 }// gmCfgRead::get
+
+
+int gmCfgRead::get(const String &key, int &val)
+{
+	int ret = 0;
+	String v;
+	int res = get(key, v);
+	if ( res ){
+		val = v.toInt();
+		ret = 1;
+	}
+	return ret;
+}// gmCfgRead::get
+

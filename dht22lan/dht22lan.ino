@@ -7,6 +7,7 @@
 //#include <gmUrlS.h>
 //#include "gsim047_ru.h"
 #include <gmCfgRead.h>
+#include <gmFn.h>
 
 
 #define SENSOR	A0
@@ -16,7 +17,6 @@
 //DHT dht(DHTPIN, DHTTYPE);
 
 gmUrl url("http://192.168.1.201/esp/set.php");
-//gmUrlS url("https://gsim047.ru/esp/set.php");
 int n = 0;
 
 #define DHTPIN 2     // Digital pin connected to the DHT sensor 
@@ -36,47 +36,40 @@ ADC_MODE(ADC_VCC);
 void setup() 
 {
 	//pinMode(LED_BUILTIN, OUTPUT);
-	Serial.begin(115200);
+	//Serial.begin(115200);
+	Serial_init();
 	// Serial.setDebugOutput(true);
 
 	//bl.blink(200);
 	n = 0;
 
-	Serial.printf("\n\n\n");
-
-	for ( int t = 4; t > 0; t-- ){
-		Serial.printf("[SETUP] WAIT %d...\n", t);
-		Serial.flush();
-		delay(1000);
-	}
-
 //	url.fp = fingerprint_gsim047_ru;
 	url.WiFi_connect();
 
-  dht.begin();
-  Serial.println(F("DHTxx Unified Sensor Example"));
-  // Print temperature sensor details.
-  sensor_t sensor;
-  dht.temperature().getSensor(&sensor);
-  Serial.println(F("------------------------------------"));
-  Serial.println(F("Temperature Sensor"));
-  Serial.print  (F("Sensor Type: ")); Serial.println(sensor.name);
-  Serial.print  (F("Driver Ver:  ")); Serial.println(sensor.version);
-  Serial.print  (F("Unique ID:   ")); Serial.println(sensor.sensor_id);
-  Serial.print  (F("Max Value:   ")); Serial.print(sensor.max_value); Serial.println(F("°C"));
-  Serial.print  (F("Min Value:   ")); Serial.print(sensor.min_value); Serial.println(F("°C"));
-  Serial.print  (F("Resolution:  ")); Serial.print(sensor.resolution); Serial.println(F("°C"));
-  Serial.println(F("------------------------------------"));
-  // Print humidity sensor details.
-  dht.humidity().getSensor(&sensor);
-  Serial.println(F("Humidity Sensor"));
-  Serial.print  (F("Sensor Type: ")); Serial.println(sensor.name);
-  Serial.print  (F("Driver Ver:  ")); Serial.println(sensor.version);
-  Serial.print  (F("Unique ID:   ")); Serial.println(sensor.sensor_id);
-  Serial.print  (F("Max Value:   ")); Serial.print(sensor.max_value); Serial.println(F("%"));
-  Serial.print  (F("Min Value:   ")); Serial.print(sensor.min_value); Serial.println(F("%"));
-  Serial.print  (F("Resolution:  ")); Serial.print(sensor.resolution); Serial.println(F("%"));
-  Serial.println(F("------------------------------------"));
+	dht.begin();
+	Serial.println(F("DHTxx Unified Sensor Example"));
+	// Print temperature sensor details.
+	sensor_t sensor;
+	dht.temperature().getSensor(&sensor);
+	Serial.println(F("------------------------------------"));
+	Serial.println(F("Temperature Sensor"));
+	Serial.print  (F("Sensor Type: ")); Serial.println(sensor.name);
+	Serial.print  (F("Driver Ver:  ")); Serial.println(sensor.version);
+	Serial.print  (F("Unique ID:   ")); Serial.println(sensor.sensor_id);
+	Serial.print  (F("Max Value:   ")); Serial.print(sensor.max_value); Serial.println(F("°C"));
+	Serial.print  (F("Min Value:   ")); Serial.print(sensor.min_value); Serial.println(F("°C"));
+	Serial.print  (F("Resolution:  ")); Serial.print(sensor.resolution); Serial.println(F("°C"));
+	Serial.println(F("------------------------------------"));
+	// Print humidity sensor details.
+	dht.humidity().getSensor(&sensor);
+	Serial.println(F("Humidity Sensor"));
+	Serial.print  (F("Sensor Type: ")); Serial.println(sensor.name);
+	Serial.print  (F("Driver Ver:  ")); Serial.println(sensor.version);
+	Serial.print  (F("Unique ID:   ")); Serial.println(sensor.sensor_id);
+	Serial.print  (F("Max Value:   ")); Serial.print(sensor.max_value); Serial.println(F("%"));
+	Serial.print  (F("Min Value:   ")); Serial.print(sensor.min_value); Serial.println(F("%"));
+	Serial.print  (F("Resolution:  ")); Serial.print(sensor.resolution); Serial.println(F("%"));
+	Serial.println(F("------------------------------------"));
 }// setup
 
 
@@ -101,39 +94,22 @@ void loop()
 			url.set("mac", mac);
 			//sprintf(url, "/esp/set1.php?dat=init&mac=%s", mac.c_str());
 		}else{
-			//int vcc = ESP.getVcc();
 
 			sensors_event_t event;
 			dht.temperature().getEvent(&event);
 			if ( isnan(event.temperature) ){
-    //Serial.println(F("Error reading temperature!"));
-    //sprintf(url, "%s/esp/set1.php?error=temperature", url0);
 				url.set("t", "error");
 			}else{
-    //Serial.print(F("Temperature: "));
-    //Serial.print(event.temperature);
 				url.set("t", event.temperature);
-    //Serial.println(F("°C"));
-    //sprintf(url, "%s/esp/set1.php?t=%f", url0, event.temperature);
 			}
 
   // Get humidity event and print its value.
 			dht.humidity().getEvent(&event);
 			if ( isnan(event.relative_humidity) ){
-    //Serial.println(F("Error reading humidity!"));
-    //sprintf(url, "%s/esp/set1.php?error=humidity", url0);
 				url.set("h", "error");
 			}else{
-    //Serial.print(F("Humidity: "));
-    //Serial.print(event.relative_humidity);
 				url.set("h", event.relative_humidity);
-    //Serial.println(F("%"));
-    //sprintf(url, "%s/esp/set1.php?h=%f", url0, event.relative_humidity);
-
 			}
-
-			//url.set("dat", vcc);
-			//sprintf(url, "/esp/set1.php?dat=%d", vcc);
 		}
 		Serial.println(url.get());
 		n++;
