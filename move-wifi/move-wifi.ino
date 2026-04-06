@@ -43,8 +43,8 @@ bool exec(const String &txt)
 		return false;
 
    	url.clear();
-	String mac = url.WiFi_macAddress();
-   	url.set("mac", mac);
+//	String mac = url.WiFi_macAddress();
+//   	url.set("mac", mac);
    	url.set("event", txt);
    	n++;
 

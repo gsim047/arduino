@@ -81,6 +81,8 @@ void exec()
 	Serial.println(bd);
 
 	gmCfgRead rd(bd);
+	rd.get("delay", toDelay);
+	/*
 	std::map<String, String> par;
 	int nn = rd.get(par);
 	//Serial.printf("nn=%d\n", nn);
@@ -95,7 +97,7 @@ void exec()
 			toDelay = dl.toInt();
 			Serial.printf("param delay: %d\n", toDelay);
 		}
-	}
+	}*/
 }// exec
 
 

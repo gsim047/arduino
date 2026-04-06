@@ -31,8 +31,8 @@ bool exec(const String &txt)
 		return false;
 
    	url.clear();
-	String mac = url.WiFi_macAddress();
-   	url.set("mac", mac);
+//	String mac = url.WiFi_macAddress();
+//   	url.set("mac", mac);
    	url.set("txt", txt);
     if ( name.length() > 0 ){
     	url.set("name", name);
@@ -46,6 +46,9 @@ bool exec(const String &txt)
    	Serial.println(bd);
 
    	gmCfgRead rd(bd);
+    rd.get("delay", toDelay);
+    rd.get("name", name);
+    /*
    	std::map<String, String> par;
    	int nn = rd.get(par);
    	//Serial.printf("nn=%d\n", nn);
@@ -59,7 +62,7 @@ bool exec(const String &txt)
         if ( nm.length() > 0 ){
         	name = nm;
         }
-   	}
+   	}*/
     return true;
 }// exec
 

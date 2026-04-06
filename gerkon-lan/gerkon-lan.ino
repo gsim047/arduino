@@ -45,6 +45,8 @@ bool exec(const String &txt)
 //   	Serial.println(bd);
 
    	gmCfgRead rd(bd);
+    rd.get("delay", toDelay);
+    /*
    	std::map<String, String> par;
    	int nn = rd.get(par);
    	//Serial.printf("nn=%d\n", nn);
@@ -58,7 +60,7 @@ bool exec(const String &txt)
         if ( nm.length() > 0 ){
         	name = nm;
         }
-   	}
+   	}*/
     return true;
 }// exec
 

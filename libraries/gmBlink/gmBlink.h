@@ -15,11 +15,12 @@
 
 class gmBlink {
 public:
-	gmBlink() : n(2), inv(true), ni(false) {}
-	gmBlink(int N) : n(N), inv(defInv(n)), ni(false) {}
-	gmBlink(int N, bool Inv) : n(N), inv(Inv), ni(false) {}
+	gmBlink() : n(2), inv(true), ni(false) { down(); }
+	gmBlink(int N) : n(N), inv(defInv(n)), ni(false) { down(); }
+	gmBlink(int N, bool Inv) : n(N), inv(Inv), ni(false) { down(); }
 	gmBlink(const char *pin) : n(defN(pin)), ni(false) {
 		inv = defInv(n);
+		down();
 	}
 
 	gmBlink &operator=(const gmBlink &src){

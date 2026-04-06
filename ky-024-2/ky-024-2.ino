@@ -3,6 +3,7 @@
 //#include <DallasTemperature.h>
 #include <gmUrlS.h>
 #include <wifi_info.h>
+#include <gmFn.h>
 
 
 #define DPIN 4
@@ -18,13 +19,14 @@ gmUrlS url("https://gsim047.ru/esp/set.php");
 
 void setup() 
 {
-	setWiFi(0);	
-	Serial.begin(115200);
+	setWiFi(0);
+	//Serial.begin(115200);
 	pinMode(DPIN, INPUT);
 	pinMode(APIN, INPUT);
   
-	Serial.println("\nStart!");
-	n = 1;
+    Serial_init();
+	//Serial.println("\nStart!");
+	n = 0;
 	url.WiFi_connect();
 }// setup
 
@@ -36,6 +38,7 @@ void loop()
 		return;
 	}
 
+	n++;
 	int dres = digitalRead(DPIN);
 	float ares = analogRead(APIN);
 
@@ -50,7 +53,7 @@ void loop()
 
 		url.clear();
 		url.set("n", n);
-		url.set("mac", url.WiFi_macAddress());
+//		url.set("mac", url.WiFi_macAddress());
 		url.set("d", dres);
 		url.set("a", ares);
 
