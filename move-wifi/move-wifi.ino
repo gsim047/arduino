@@ -4,6 +4,7 @@
 #include <gmBlink.h>
 #include <gmUrl.h>
 #include <gmFn.h>
+#include <gmCfgRead.h>
  
 int led = 2;                   // контакт для светодиода / BUILTIN
 int sensor = 4;                // контакт для датчика    / D2
@@ -13,6 +14,7 @@ int n = 0;
 gmBlink ld(led);
 gmUrl url("http://192.168.1.201/esp/move/set.php");
 
+String name;
 
 
 void setup() 
@@ -34,10 +36,24 @@ void setup()
 	}*/
 
 	url.WiFi_connect();
+
+	for ( int i = 0; i < 16; i++ ){
+		if ( url.WiFi_check() )
+			break;
+		delay(250);
+	}
+
+   	url.clear();
+   	url.set("event", "init");
+	String res;
+	int code = url.call(res);  //
+	if ( code == 0 ){
+		String bd = url.extract(res, "<pre>", "</pre>");
+		gmCfgRead rd(bd);
+		rd.get("name", name);
+	}
 }// setup
 
-
-String name;
 
 
 bool exec(const String &txt)
@@ -52,16 +68,20 @@ bool exec(const String &txt)
    	url.set("event", txt);
    	n++;
 
-   	String res;
-   	int code = url.call(res);  //
-    if ( code != 200 )
-    	return false;
+	String res;
+	Serial.println(url.get());
+	int code = url.call(res);  //
+	//Serial.printf("code: %d\n", code);
+	if ( code != 0 )
+		return false;
     
 	String bd = url.extract(res, "<pre>", "</pre>");
 	//Serial.println(bd);
 
 	gmCfgRead rd(bd);
+	//Serial.println("to get [name]");
 	rd.get("name", name);
+	//Serial.printf("name is [%s]\n", name.c_str());
     return true;
 }// exec
 
@@ -70,11 +90,12 @@ void loop()
 {
 	n++;
 	int val = digitalRead(sensor);     // считываем данные от датчика
+//	Serial.printf("val: %d\n", val);
 	
 	if ( val != state ){
 		String msg;
 		if ( val == HIGH ){
-			msg = "MotionAlarm!";
+			msg = "MotionAlarm";
 		}else{
 			msg = "MotionStop";
 		}
