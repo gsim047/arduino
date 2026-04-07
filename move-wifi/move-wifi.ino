@@ -5,8 +5,8 @@
 #include <gmUrl.h>
 #include <gmFn.h>
  
-int led = 2;                   // контакт для светодиода
-int sensor = 4;                // контакт для датчика
+int led = 2;                   // контакт для светодиода / BUILTIN
+int sensor = 4;                // контакт для датчика    / D2
 int state = LOW;               // по умолчанию никакого движения не определено
 
 int n = 0;
