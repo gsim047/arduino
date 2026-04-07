@@ -38,6 +38,7 @@ public:
 	void up() const;
 	void down() const;
 	void blink(int tim) const;
+	void blink2(int tim, int del, int tim2) const;
 
 public:
 	int n;

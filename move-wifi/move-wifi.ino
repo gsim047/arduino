@@ -11,7 +11,7 @@ int state = LOW;               // по умолчанию никакого дв�
 
 int n = 0;
 gmBlink ld(led);
-gmUrl url("http://192.168.1.201/esp/move.php");
+gmUrl url("http://192.168.1.201/esp/move/set.php");
 
 
 
@@ -37,6 +37,9 @@ void setup()
 }// setup
 
 
+String name;
+
+
 bool exec(const String &txt)
 {
 	if ( !url.WiFi_check() )
@@ -45,12 +48,21 @@ bool exec(const String &txt)
    	url.clear();
 //	String mac = url.WiFi_macAddress();
 //   	url.set("mac", mac);
+	url.set("name", name);
    	url.set("event", txt);
    	n++;
 
    	String res;
    	int code = url.call(res);  //
-    return (code == 200);
+    if ( code != 200 )
+    	return false;
+    
+	String bd = url.extract(res, "<pre>", "</pre>");
+	//Serial.println(bd);
+
+	gmCfgRead rd(bd);
+	rd.get("name", name);
+    return true;
 }// exec
 
 

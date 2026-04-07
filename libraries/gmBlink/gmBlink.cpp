@@ -53,6 +53,14 @@ void gmBlink::blink(int tim) const
 }// gmBlink::blink
 
 
+void gmBlink::blink2(int tim, int del, int tim2) const
+{
+	blink(tim);
+	delay(del);
+	blink(tim2);
+}// gmBlink::blink2
+
+
 void gmBlink::up() const
 {
 	if ( !ni ){

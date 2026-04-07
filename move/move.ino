@@ -9,6 +9,7 @@
 // https://voltiq.ru/arduino-and-sensor-hc-sr501/
 
 #include <gmBlink.h>
+#include <gmFn.h>
 
 
 int led = 2;                   // контакт для светодиода
@@ -21,15 +22,16 @@ gmBlink ld(led);
 
 void setup() 
 {
-	pinMode(led, OUTPUT);      // контакт для светодиода 
+	//pinMode(led, OUTPUT);      // контакт для светодиода 
 	pinMode(sensor, INPUT);    // контакт для датчика 
-	Serial.begin(115200);      // инициализируем последовательную коммуникацию
-	//digitalWrite(led, LOW);
+	//Serial.begin(115200);      // инициализируем последовательную коммуникацию
 	ld.down();
-	Serial.println("1");
-	Serial.println("2");
-	Serial.println("3");
-	Serial.println("4");
+	ld.blink(200);
+	Serial_init();
+	//digitalWrite(led, LOW);
+	ld.blink(200);
+	delay(200);
+	ld.blink(200);
 }// setup
 
 
