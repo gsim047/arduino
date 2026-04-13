@@ -101,6 +101,7 @@ int gmUrl::call(String &res)
 	HTTPClient http;
 
 	set("mac", WiFi_macAddress());
+	set("name", name);
 
 	String url = get();
     //Serial.printf("to call => [%s]\n", url.c_str());

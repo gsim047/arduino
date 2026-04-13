@@ -39,6 +39,7 @@ public:
 //	String url1;  // /data/set.php
 	String param;
 	int dbg;
+	String name;
 };// class gmUrl
 
 

@@ -1,9 +1,8 @@
-
 #include <Arduino.h>
-#include <gmBlink.h>
 
-//#include <gmNetTools.h>
+#include <gmBlink.h>
 #include <gmUrl.h>
+#include <gmFn.h>
 #include <gmTimer.h>
 #include <gmCfgRead.h>
 
@@ -16,16 +15,10 @@
 int n = 0;
 
 gmBlink bl;
-//gmUrl url("http://192.168.1.201/esp/set.php");
-gmUrl url("https://gsim047.ru/esp/set.php");
+gmUrl url("http://192.168.1.201/esp/set.php");
 
 gmTimer tim(100);
-
-//int ledN = LED_BUILTIN;
-//int ledINV = 1;
-//char ssid[] = "HomeAsus87U";
-//char psw[] = "***";
-//char url0[] = "http://192.168.1.201";
+int toDelay = 10000;
 
 ADC_MODE(ADC_VCC);
 
@@ -33,28 +26,15 @@ ADC_MODE(ADC_VCC);
 
 void setup() 
 {
-	Serial.begin(115200);
-	// Serial.setDebugOutput(true);
-
 	bl.blink(200);
 	n = 0;
 
-	Serial.println();
-	Serial.println();
-	Serial.println();
-
-	for ( int t = 4; t > 0; t-- ){
-		Serial.printf("[SETUP] WAIT %d...\n", t);
-		Serial.flush();
-		delay(1000);
-	}
+	Serial_init();
+	// Serial.setDebugOutput(true);
 
 	gmUrl::WiFi_connect();
 }// setup
 
-
-
-int toDelay = 10000;
 
 
 void loop() 
@@ -69,15 +49,10 @@ void loop()
 
 		url.clear();
 		if ( n == 0 ){
-			String mac = gmUrl::WiFi_macAddress();
-			url.set("dat", "init");
-			url.set("mac", mac);
-			//sprintf(url, "/esp/set1.php?dat=init&mac=%s", mac.c_str());
-		}else{
-			int vcc = ESP.getVcc();
-			url.set("dat", vcc);
-			//sprintf(url, "/esp/set1.php?dat=%d", vcc);
+			url.set("event", "init");
 		}
+		int vcc = ESP.getVcc();
+		url.set("dat", vcc);
 		Serial.println(url.get());
 		n++;
 
@@ -105,6 +80,7 @@ void loop()
 			}
 		}*/
 		rd.get("delay", toDelay);
+		rd.get("name", url.name);
 	}
 
 	Serial.println(n);
