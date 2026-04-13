@@ -1,8 +1,16 @@
 <?php
 
+
 date_default_timezone_set('Europe/Moscow');
 $datd = date("Y-m-d");
 $datt = date("H:i:s");
+
+$name = "";
+$name0 = $name;
+if ( $name != "" )
+	$name .= "-";
+else
+	$name0 = "esp";
 
 $adr = $_SERVER['REMOTE_ADDR'];
 
@@ -11,13 +19,13 @@ $arg = "";
 if ( !empty($_GET["dat"]) ){
 	$arg = $_GET["dat"];
 }
-printf("vcc:[$arg]<br/>\n");
+//printf("vcc:[$arg]<br/>\n");
 
-//$pth = "/var/www"
 
 $pth = realpath(dirname(__FILE__)) . "/"; //"/esp/";
-$log = $pth . $datd . ".log";
-printf("logfile: $datd.log<br/>\n");
+$logsh = $name . $datd . ".log";
+$log = $pth . $logsh;
+printf("logfile: $logsh<br/>\n");
 
 $mac = "";
 
@@ -38,32 +46,41 @@ if ( $fo ){
 
 printf("<br/><br/><br/>");
 
-$cfg = $pth . "esp.cfg";
+$cfg = $pth . $name0 . ".cfg";  // esp.cfg
 //printf("cfgfile: $cfg<br/>\n");
 if ( !file_exists($cfg) ){
 	$file = fopen($cfg, "w+");
 	fclose($file);
+	chmod($cfg, 0660);
 }
+$str = file_get_contents($cfg) . "\n"; // read esp.cfg
 
-$cfgip = $pth . $adr . ".cfg";
+
+// add date & time
+$str .= "\ndate=" . $datd . "\ntime=" . $datt . "\n";
+
+
+$cfgip = $pth . "ip-" . $adr . ".cfg";
 //printf("ipfile: $cfgip<br/>\n");
 if ( !file_exists($cfgip) ){
 	$file = fopen($cfgip, "w+");
 	fclose($file);
+	chmod($cfgip, 0660);
 }
+$str .= file_get_contents($cfgip) . "\n"; // read ip-.cfg
 
-$str = file_get_contents($cfg) . "\ndate=" . $datd . "\ntime=" . $datt . "\n" . file_get_contents($cfgip);
 
 if ( $mac != "" ){
-	$cfgmac = $pth . $mac . ".cfg";
+	$cfgmac = $pth . "mac-" . $mac . ".cfg";
 	//printf("ipfile: $cfgip<br/>\n");
 	if ( !file_exists($cfgmac) ){
 		$file = fopen($cfgmac, "w+");
 		fwrite($file, "# ip=$adr\n\n");
 		fclose($file);
+		chmod($cfgmac, 0660);
 	}
 
-	$str = $str . "\n" . file_get_contents($cfgmac);
+	$str .= file_get_contents($cfgmac) . "\n";
 }
 
 printf("Cfg:<br/>-[--<br/>");
