@@ -30,38 +30,25 @@ bool exec(const String &txt)
 		return false;
 
    	url.clear();
-	String mac = url.WiFi_macAddress();
-   	url.set("mac", mac);
-   	url.set("txt", txt);
-    if ( name.length() > 0 ){
-    	url.set("name", name);
-    }
-   	n++;
+//	String mac = url.WiFi_macAddress();
+//   	url.set("mac", mac);
+	url.set("txt", txt);
+//    if ( name.length() > 0 ){
+//    	url.set("name", name);
+//    }
+	n++;
 
-   	String res;
-   	int code = url.call(res);  //
-   	//Serial.println(res);
-   	String bd = url.extract(res, "<pre>", "</pre>");
+//	String res;
+	int code = url.call();  //
+	//Serial.println(res);
+//	String bd = url.extract(res, "<pre>", "</pre>");
 //   	Serial.println(bd);
 
-   	gmCfgRead rd(bd);
-    rd.get("delay", toDelay);
-    /*
-   	std::map<String, String> par;
-   	int nn = rd.get(par);
-   	//Serial.printf("nn=%d\n", nn);
-   	if ( nn > 0 ){
-   		String dl = par["delay"];
-   		if ( dl.length() > 0 ){
-   			toDelay = dl.toInt();
-//   			Serial.printf("param delay: %d\n", toDelay);
-   		}
-        String nm = par["name"];
-        if ( nm.length() > 0 ){
-        	name = nm;
-        }
-   	}*/
-    return true;
+	if ( code ){
+		gmCfgRead rd(url);
+		rd.get("delay", toDelay);
+	}
+	return true;
 }// exec
 
 

@@ -5,6 +5,8 @@
 //#include <string>
 //using std::string;
 #include <map>
+#include <gmUrl.h>
+
 
 
 class gmCfgRead {
@@ -12,6 +14,10 @@ public:
 	gmCfgRead() : pos(0) {}
 	gmCfgRead(const gmCfgRead &src) : data(src.data), pos(src.pos) {}
 	gmCfgRead(const String &s) : data(s), pos(0) {}
+	gmCfgRead(gmUrl &url) : pos(0) {
+		data = url.extract(url.res, "<pre>", "</pre>");
+		this->get("name", url.name);
+	}
 
 	gmCfgRead &operator=(const gmCfgRead &src){
 		if ( &src != this ){

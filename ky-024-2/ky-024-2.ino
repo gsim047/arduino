@@ -2,7 +2,7 @@
 //#include <OneWire.h>
 //#include <DallasTemperature.h>
 #include <gmUrlS.h>
-#include <wifi_info.h>
+//#include <wifi_info.h>
 #include <gmFn.h>
 
 
@@ -12,6 +12,7 @@
 
 int n = 0;
 float last = 0.;
+int step = 5;
 
 gmUrlS url("https://gsim047.ru/esp/set.php");
 
@@ -48,7 +49,7 @@ void loop()
 	else
 		dl = last - ares;
 
-	if ( dl >= 5. ){
+	if ( dl >= step ){
 		Serial.printf("%d: %d %.0f\n", n, dres, ares);
 
 		url.clear();

@@ -20,9 +20,7 @@ int n;
 gmBlink bl;
 gmUrlS url("https://gsim047.ru/esp/set.php");
 
-
 int toDelay = 10000;
-String name = "";
 
 
 bool exec(const String &txt)
@@ -30,39 +28,15 @@ bool exec(const String &txt)
 	if ( !url.WiFi_check() )
 		return false;
 
-   	url.clear();
-//	String mac = url.WiFi_macAddress();
-//   	url.set("mac", mac);
-   	url.set("txt", txt);
-    if ( name.length() > 0 ){
-    	url.set("name", name);
-    }
-   	n++;
+	url.clear();
+	url.set("txt", txt);
+	n++;
 
-   	String res;
-   	int code = url.call(res);  //
-   	//Serial.println(res);
-   	String bd = url.extract(res, "<pre>", "</pre>");
-   	Serial.println(bd);
-
-   	gmCfgRead rd(bd);
-    rd.get("delay", toDelay);
-    rd.get("name", name);
-    /*
-   	std::map<String, String> par;
-   	int nn = rd.get(par);
-   	//Serial.printf("nn=%d\n", nn);
-   	if ( nn > 0 ){
-   		String dl = par["delay"];
-   		if ( dl.length() > 0 ){
-   			toDelay = dl.toInt();
-   			Serial.printf("param delay: %d\n", toDelay);
-   		}
-        String nm = par["name"];
-        if ( nm.length() > 0 ){
-        	name = nm;
-        }
-   	}*/
+	int code = url.call();  //
+	if ( code ){
+		gmCfgRead rd(url);
+		rd.get("delay", toDelay);
+	}
     return true;
 }// exec
 

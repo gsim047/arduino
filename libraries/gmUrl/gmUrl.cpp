@@ -92,7 +92,7 @@ void gmUrl::clear()
 }// gmUrl::clear
 
 
-int gmUrl::call(String &res)
+int gmUrl::call()
 {
 	res = "";
 	int ret = 0;
@@ -150,13 +150,13 @@ int gmUrl::call(String &res)
 	return ret;
 }// gmUrl::call
 
-
+/*
 int gmUrl::call()
 {
 	String res;
 	return call(res);
 }// gmUrl::call
-
+*/
 
 String gmUrl::extract(const String &res, const String &s1, const String &s2)
 {

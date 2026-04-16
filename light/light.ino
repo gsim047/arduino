@@ -7,6 +7,7 @@
 int dataPin = A0;
 int oldval = 0;
 int n = 0;
+int step = 25;
 
 
 void setup()
@@ -24,7 +25,7 @@ void loop()
 	int delta = val - oldval;
 	if ( delta < 0 ) 
 		delta = -delta;
-	if ( delta > 25 ){
+	if ( delta >= step ){
 		Serial.printf("%d: %d\n", n, val);
 		oldval = val;
 	}

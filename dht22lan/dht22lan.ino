@@ -8,6 +8,7 @@
 //#include "gsim047_ru.h"
 #include <gmCfgRead.h>
 #include <gmFn.h>
+#include <gmBlink.h>
 
 
 #define SENSOR	A0
@@ -18,6 +19,8 @@
 
 gmUrl url("http://192.168.1.201/esp/set.php");
 int n = 0;
+gmBlink bl;
+int toDelay = 10000;
 
 #define DHTPIN 2     // Digital pin connected to the DHT sensor 
 // Feather HUZZAH ESP8266 note: use pins 3, 4, 5, 12, 13 or 14 --
@@ -35,12 +38,10 @@ ADC_MODE(ADC_VCC);
 
 void setup() 
 {
-	//pinMode(LED_BUILTIN, OUTPUT);
-	//Serial.begin(115200);
+	bl.blink(200);
 	Serial_init();
 	// Serial.setDebugOutput(true);
 
-	//bl.blink(200);
 	n = 0;
 
 //	url.fp = fingerprint_gsim047_ru;
@@ -74,9 +75,6 @@ void setup()
 
 
 
-int toDelay = 10000;
-
-
 void loop() 
 {
 	if ( url.WiFi_check() ){
@@ -89,9 +87,9 @@ void loop()
 
 		url.clear();
 		if ( n == 0 ){
-			String mac = url.WiFi_macAddress();
+//			String mac = url.WiFi_macAddress();
 			url.set("dat", "init");
-			url.set("mac", mac);
+//			url.set("mac", mac);
 			//sprintf(url, "/esp/set1.php?dat=init&mac=%s", mac.c_str());
 		}else{
 
@@ -114,28 +112,13 @@ void loop()
 		Serial.println(url.get());
 		n++;
 
-		String res;
-		int code = url.call(res);  //
+		int code = url.call();  //
 		//Serial.println(res);
-		String bd = url.extract(res, "<pre>", "</pre>");
-		Serial.println(bd);
+		//String bd = url.extract(res, "<pre>", "</pre>");
+		//Serial.println(bd);
 
-		gmCfgRead rd(bd);
-		std::map<String, String> par;
-		int nn = rd.get(par);
-		//Serial.printf("nn=%d\n", nn);
-		if ( nn > 0 ){
-			//for ( std::map<String, String>::const_iterator it = par.begin(); it != par.end(); ++it ){
-			//	String out = String("[") + it->first + "]=[" + it->second + "]";
-			//	Serial.println(out);
-			//}
-
-			String dl = par["delay"];
-			if ( dl.length() > 0 ){
-				toDelay = dl.toInt();
-				Serial.printf("param delay: %d\n", toDelay);
-			}
-		}
+		gmCfgRead rd(url);
+		rd.get("delay", toDelay);
 	}
 
 	Serial.println(n);

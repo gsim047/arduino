@@ -25,7 +25,7 @@ public:
 	void set(const String &key, float val);
 
 	String get() const; // ret url
-	int call(String &res);      // ret errorcode & result of curl
+	//int call(String &res);      // ret errorcode & result of curl
 	int call();                 // ret errorcode
 	static String extract(const String &res, const String &s1, const String &s2);
 
@@ -40,6 +40,7 @@ public:
 	String param;
 	int dbg;
 	String name;
+	String res;
 };// class gmUrl
 
 
