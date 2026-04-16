@@ -7,8 +7,8 @@
 
 class gmStep {
 public:
-	gmStep(int Step) : val(-1), step(Step), mode(0), ch(0) {}
-	gmStep(const String &ini) : val(-1), step(1), mode(0), ch(0) { init(ini); }
+	gmStep(int Step) : val(-1), step(Step), mode(1), ch(0) {}
+	gmStep(const String &ini) : val(-1), step(1), mode(1), ch(0) { init(ini); }
 	gmStep(const gmStep &src) : val(src.val), step(src.step), mode(src.mode), ch(0) {}
 
 	gmStep &operator=(const gmStep &src){
