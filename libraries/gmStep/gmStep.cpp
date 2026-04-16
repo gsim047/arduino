@@ -30,23 +30,42 @@ int gmStep::set(int newval)
 }// gmStep::newval
 
 
-void gmStep::init(const String &ini)
+void gmStep::setStep(const String &ini)
 {
+	int Step = -1;
+	int Mode = -1;
 	int pos = ini.indexOf(",");
 	if ( pos >= 0 ){
 		String s1 = ini.substring(0, pos);
 		String s2 = ini.substring(pos+1);
 		if ( s1 != "" )
-			step = s1.toInt();
+			Step = s1.toInt();
 		if ( s2 != "" )
-			mode = s2.toInt();
+			Mode = s2.toInt();
 	}else{
 		if ( ini != "" ){
-			step = ini.toInt();
+			Step = ini.toInt();
 		}
 	}
-	if ( step < 1 )
-		step = 1;
-	if ( mode != 0 && mode != 1 )
-		mode = 1;
-}// gmStep::init
+
+	if ( Step >= 1 )
+		step = Step;
+	if ( Mode >= 0 ){
+		if ( Mode == 0 )
+			mode = 0;
+		else
+			mode = 1;
+	}
+}// gmStep::setStep
+
+
+void gmStep::setStep(int Step, int Mode)
+{
+	if ( Mode >= 0 ){
+		if ( Mode == 0 )
+			mode = 0;
+		else
+			mode = 1;
+	}
+	step = Step;
+}// gmStep::setStep

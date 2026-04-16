@@ -57,7 +57,8 @@ $str = file_get_contents($cfg) . "\n"; // read esp.cfg
 
 
 // add date & time
-$str .= "\ndate=" . $datd . "\ntime=" . $datt . "\n";
+$str .= "date=" . $datd . "\n";
+$str .= "time=" . $datt . "\n";
 
 
 $cfgip = $pth . "ip-" . $adr . ".cfg";

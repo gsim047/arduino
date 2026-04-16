@@ -13,7 +13,7 @@ gmUrl url("http://192.168.1.201/esp/wet/set.php");
 
 int n = 0;
 int toDelay = 10000;
-String name;
+//String name;
 
 
 
@@ -48,18 +48,19 @@ void loop()
 		url.set("event", "init");
 	}
 	url.set("wet", sensorValue);
-	url.set("name", name);
+//	url.set("name", name);
 
-	String res;
-	int code = url.call(res);  //
+//	String res;
+	int code = url.call();  //
 	//Serial.println(res);
-	String bd = gmUrl::extract(res, "<pre>", "</pre>");
+	//String bd = gmUrl::extract(res, "<pre>", "</pre>");
 	//Serial.println(bd);
 
-	gmCfgRead rd(bd);
-	rd.get("delay", toDelay);
-	rd.get("name", name);
-
+	if ( code == 0 ){
+		gmCfgRead rd(url);
+		rd.get("delay", toDelay);
+		//rd.get("name", name);
+	}
 	n++;
 	delay(toDelay);
 }// loop

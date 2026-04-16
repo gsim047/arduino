@@ -47,7 +47,7 @@ void setup()
 		String str;
 		rd.get("step", str);
 		if ( str != "" )
-			st = gmStep(str);
+			st.setStep(str);
 	}
 }// setup
 
@@ -74,8 +74,7 @@ void loop()
 			String str;
 			rd.get("step", str);
 			if ( str != "" ){
-				st = gmStep(str);
-				st = val;
+				st.setStep(str);
 			}
 		}
 
