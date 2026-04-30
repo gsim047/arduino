@@ -21,6 +21,7 @@ public:
 	int changed() const { return ch; }
 
 	int operator=(int newval){ return set(newval); }
+	int operator<<(int newval){ val = newval; return val; }
 
 	void setStep(const String &ini);
 	void setStep(int Step, int Mode = -1);

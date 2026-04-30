@@ -5,11 +5,12 @@
 #include <gmBlink.h>
 #include <gmStep.h>
 
-// датчик освещённости
+// ик-датчик расстояния
 
 int dataPin = A0;
+int signalPin = D2;
 
-gmUrl url("http://192.168.1.201/esp/light/set.php");
+gmUrl url("http://192.168.1.201/esp/ik/set.php");
 gmBlink bl;
 
 //ADC_MODE(ADC_VCC);
@@ -17,7 +18,8 @@ gmBlink bl;
 int toDelay = 10000;
 String name;
 
-int oldval = 0;
+int oldval = -1;
+int oldsig = -1;
 int n = 0;
 //int step = 10;
 gmStep st(10);
@@ -27,6 +29,7 @@ void setup()
 {
 	bl.blink(200);
 	pinMode(dataPin, INPUT);
+	pinMode(signalPin, INPUT);
 	Serial_init();
 	bl.blink(500);
 
@@ -44,10 +47,10 @@ void setup()
 	if ( code == 0 ){
 		gmCfgRead rd(url);
 		rd.get("name", url.name);
-		String str;
-		rd.get("step", str);
-		if ( str != "" )
-			st.setStep(str);
+		int s = 0;
+		rd.get("step", s);
+		if ( s > 0 && s != st.step )
+			st.setStep(s);
 	}
 }// setup
 
@@ -63,11 +66,12 @@ void loop()
 
 	n++;
 	int val = analogRead(dataPin);
+	int sig = digitalRead(signalPin);
 
 	st = val;
 	if ( st.changed() ){
 		url.clear();
-	   	url.set("light", val);
+	   	url.set("dist", val);
 		int code = url.call();  //
 		if ( code == 0 ){
 			gmCfgRead rd(url);
@@ -80,20 +84,6 @@ void loop()
 
 		Serial.printf("%d: %d\n", n, val);
 	}
-	/*
-	int newval = val / step;
-	if ( newval != oldval ){
-		url.clear();
-	   	url.set("light", val);
-		int code = url.call();  //
-		if ( code == 0 ){
-			gmCfgRead rd(url);
-			rd.get("step", step);
-		}
-
-		Serial.printf("%d: %d\n", n, val);
-		oldval = newval;
-	}*/
 
 	delay(10);
 }// loop
