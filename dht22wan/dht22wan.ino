@@ -3,11 +3,11 @@
 #include <DHT_U.h>
 //#include <DHT.h>
 
-//#include <gmUrl.h>
 #include <gmUrlS.h>
-#include "gsim047_ru.h"
 #include <gmCfgRead.h>
+#include <gmFn.h>
 
+#include "gsim047_ru.h"
 
 #define SENSOR	A0
 //#define DHTTYPE	DHT11
@@ -15,8 +15,9 @@
 
 //DHT dht(DHTPIN, DHTTYPE);
 
-gmUrlS url("http://gsim047.ru/esp/set.php");
+gmUrlS url("https://gsim047.ru/esp/set.php");
 int n = 0;
+int toDelay = 10000;
 
 #define DHTPIN 2     // Digital pin connected to the DHT sensor 
 // Feather HUZZAH ESP8266 note: use pins 3, 4, 5, 12, 13 or 14 --
@@ -34,20 +35,12 @@ ADC_MODE(ADC_VCC);
 
 void setup() 
 {
+	Serial_init();
 	//pinMode(LED_BUILTIN, OUTPUT);
-	Serial.begin(115200);
 	// Serial.setDebugOutput(true);
 
 	//bl.blink(200);
 	n = 0;
-
-	Serial.printf("\n\n\n");
-
-	for ( int t = 4; t > 0; t-- ){
-		Serial.printf("[SETUP] WAIT %d...\n", t);
-		Serial.flush();
-		delay(1000);
-	}
 
 	url.fp = fingerprint_gsim047_ru;
 	url.WiFi_connect();
@@ -79,10 +72,6 @@ void setup()
 }// setup
 
 
-
-int toDelay = 10000;
-
-
 void loop() 
 {
 	if ( url.WiFi_check() ){
@@ -96,8 +85,8 @@ void loop()
 		url.clear();
 		if ( n == 0 ){
 			String mac = url.WiFi_macAddress();
-			url.set("dat", "init");
-			url.set("mac", mac);
+			url.set("event", "init");
+			//url.set("mac", mac);
 			//sprintf(url, "/esp/set1.php?dat=init&mac=%s", mac.c_str());
 		}else{
 			//int vcc = ESP.getVcc();
@@ -137,27 +126,11 @@ void loop()
 		Serial.println(url.get());
 		n++;
 
-		String res;
-		int code = url.call(res);  //
-		//Serial.println(res);
-		String bd = url.extract(res, "<pre>", "</pre>");
-		Serial.println(bd);
-
-		gmCfgRead rd(bd);
-		std::map<String, String> par;
-		int nn = rd.get(par);
-		//Serial.printf("nn=%d\n", nn);
-		if ( nn > 0 ){
-			//for ( std::map<String, String>::const_iterator it = par.begin(); it != par.end(); ++it ){
-			//	String out = String("[") + it->first + "]=[" + it->second + "]";
-			//	Serial.println(out);
-			//}
-
-			String dl = par["delay"];
-			if ( dl.length() > 0 ){
-				toDelay = dl.toInt();
-				Serial.printf("param delay: %d\n", toDelay);
-			}
+		//String res;
+		int code = url.call();  //
+		if ( code == 0 ){
+			gmCfgRead rd(url);
+			rd.get("delay", toDelay);
 		}
 	}
 

@@ -4,12 +4,12 @@ date_default_timezone_set('Europe/Moscow');
 $datd = date("Y-m-d");
 $datt = date("H:i:s");
 
-$name = "light";
-$name0 = $name;
-if ( $name != "" )
-	$name .= "-";
-else
-	$name0 = "esp";
+$name = "move";
+$name1 = $name;
+//$pth = "/var/www"
+if ( $name1 != "" )
+	$name1 += "-";
+
 
 $adr = $_SERVER['REMOTE_ADDR'];
 
@@ -18,16 +18,12 @@ $arg = "";
 if ( !empty($_GET["dat"]) ){
 	$arg = $_GET["dat"];
 }
-//printf("vcc:[$arg]<br/>\n");
-
+printf("vcc:[$arg]<br/>\n");
 
 $pth = realpath(dirname(__FILE__)) . "/"; //"/esp/";
-$logsh = $name . $datd . ".log";
+$logsh = $name1 . $datd . ".log";
 $log = $pth . $logsh;
 printf("logfile: $logsh<br/>\n");
-$logsh2 = $name . $datd . ".plt";
-$log2 = $pth . $logsh2;
-printf("plotfile: $logsh2<br/>\n");
 
 $mac = "";
 
@@ -46,46 +42,23 @@ if ( $fo ){
 	fclose($fo);
 }
 
-$fo = fopen($log2, "at+");
-if ( $fo ){
-	$buf = "";
-	foreach ( $_REQUEST as $key => $value ){
-		printf("$key:[$value]<br/>\n");
-		$buf = $buf . "$key=$value ";
-		if ( $key == "mac" ){
-			$mac = $value;
-		}
-	}
-	fwrite($fo, "$datd_$datt $adr $buf\n");
-//	fwrite($fo, "tm=$datt ip=$adr vcc=$arg\n");
-	fclose($fo);
-}
-
 printf("<br/><br/><br/>");
 
-$cfg = $pth . $name0 . ".cfg";  // esp.cfg
+$cfg = $pth . $name . ".cfg";
 //printf("cfgfile: $cfg<br/>\n");
 if ( !file_exists($cfg) ){
 	$file = fopen($cfg, "w+");
 	fclose($file);
-	chmod($cfg, 0660);
 }
-$str = file_get_contents($cfg) . "\n"; // read esp.cfg
-
-
-// add date & time
-$str .= "\ndate=" . $datd . "\ntime=" . $datt . "\n";
-
 
 $cfgip = $pth . "ip-" . $adr . ".cfg";
 //printf("ipfile: $cfgip<br/>\n");
 if ( !file_exists($cfgip) ){
 	$file = fopen($cfgip, "w+");
 	fclose($file);
-	chmod($cfgip, 0660);
 }
-$str .= file_get_contents($cfgip) . "\n"; // read ip-.cfg
 
+$str = file_get_contents($cfg) . "\ndate=" . $datd . "\ntime=" . $datt . "\n" . file_get_contents($cfgip);
 
 if ( $mac != "" ){
 	$cfgmac = $pth . "mac-" . $mac . ".cfg";
@@ -94,10 +67,9 @@ if ( $mac != "" ){
 		$file = fopen($cfgmac, "w+");
 		fwrite($file, "# ip=$adr\n\n");
 		fclose($file);
-		chmod($cfgmac, 0660);
 	}
 
-	$str .= file_get_contents($cfgmac) . "\n";
+	$str = $str . "\n" . file_get_contents($cfgmac);
 }
 
 printf("Cfg:<br/>-[--<br/>");

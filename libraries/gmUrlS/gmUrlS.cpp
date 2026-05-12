@@ -98,32 +98,26 @@ void gmUrlS::clear()
 }// gmUrlS::clear
 
 
-int gmUrlS::call(String &res)
+int gmUrlS::call()
 {
 	res = "";
 	int ret = 0;
 
-    std::unique_ptr<BearSSL::WiFiClientSecure> client(new BearSSL::WiFiClientSecure);
-
-	//WiFiClient client;
+	std::unique_ptr<BearSSL::WiFiClientSecure> clients(new BearSSL::WiFiClientSecure);
 	if ( fp ){
-	    client->setFingerprint(fp); //fingerprint_gsim047_ru); //fingerprint_sni_cloudflaressl_com);
+		clients->setFingerprint(fp); //fingerprint_gsim047_ru); //fingerprint_sni_cloudflaressl_com);
 	}else{
-    	client->setInsecure();
+    		clients->setInsecure();
 	}
-	
 	HTTPClient https;
+
 	set("mac", WiFi_macAddress());
+	set("name", name);
 
 	String url = get();
-    //Serial.printf("to call => [%s]\n", url.c_str());
+	if ( dbg ) Serial.printf("to call => [%s]\n", url.c_str());
 
-//	if ( https.begin(*client, url, gsim047_port) /*http.begin(client, url)*/ ){  // HTTP
-//	String adr = "/esp/set.php?dat=1233";
-//	Serial.printf("to call >> [%s] [%s]\n", gsim047_host, adr.c_str());
-	if ( dbg ) Serial.printf("to call >> [%s] [%s]\n", url0.c_str(), url.c_str());
-//	if ( https.begin(*client, gsim047_host, gsim047_port, adr.c_str(), true) ){  // HTTPS
-	if ( https.begin(*client, url0.c_str(), port, url.c_str(), true) ){  // HTTPS
+	if ( https.begin(*clients, url0.c_str(), port, url.c_str(), true) ){  // HTTPS
 
 		if ( dbg ) Serial.print("[HTTPS] GET...\n");
 		int httpCode = https.GET();
@@ -168,13 +162,6 @@ int gmUrlS::call(String &res)
 }// gmUrlS::call
 
 
-int gmUrlS::call()
-{
-	String res;
-	return call(res);
-}// gmUrlS::call
-
-
 String gmUrlS::extract(const String &res, const String &s1, const String &s2)
 {
 	String body;
@@ -192,7 +179,7 @@ String gmUrlS::extract(const String &res, const String &s1, const String &s2)
 }// gmUrlS::extract
 
 
-bool gmUrlS::slice(const String &url, String &u1, String &u3, int &prt)  // https://gsim047.ru:443/esp/set.php
+bool gmUrlS::slice(const String &url, String &pr, String &u1, String &u3, int &prt)  // https://gsim047.ru:443/esp/set.php
 {
 	String u = url; // buf
 	String u0 = ""; // http:// https://
@@ -203,7 +190,10 @@ bool gmUrlS::slice(const String &url, String &u1, String &u3, int &prt)  // http
 	int pos = u.indexOf("//");
 	if ( pos >= 0 ){
 		u0 = u.substring(0, pos+2);    // https://
+		pr = u0;
 		u = u.substring(pos+2);        // gsim047.ru:443/esp/set.php
+	}else{
+		pr = ""; // ??? http:// ?
 	}
 
 	int pos1 = u.indexOf(":");

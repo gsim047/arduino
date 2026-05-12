@@ -1,15 +1,17 @@
 #include <Arduino.h>
 #include <gmFn.h>
-#include <gmUrl.h>
+#include <gmUrlS.h>
 #include <gmCfgRead.h>
 #include <gmBlink.h>
 #include <gmStep.h>
+
+#include "gsim047_ru.h"
 
 // датчик освещённости
 
 int dataPin = A0;
 
-gmUrl url("http://192.168.1.201/esp/light/set.php");
+gmUrlS url("https://gsim047.ru/esp/set.php");
 gmBlink bl;
 
 //ADC_MODE(ADC_VCC);
@@ -20,7 +22,7 @@ int toDelay = 10000;
 int oldval = 0;
 int n = 0;
 //int step = 10;
-gmStep st(25);
+gmStep st(10);
 
 
 void setup()
@@ -32,13 +34,12 @@ void setup()
 
 	n = 0;
 	Serial.println("wifi...");
+	url.fp = fingerprint_gsim047_ru;
 	url.WiFi_connect();
 	bl.blink(500);
 	Serial.println("wifi done!");
 	int rs = url.WiFi_check();
 	Serial.printf("check: %d\n", rs);
-
-	//url.dbg = 1;
 
    	url.clear();
    	url.set("event", "init");
@@ -71,7 +72,6 @@ void loop()
 		url.clear();
 	   	url.set("light", val);
 		int code = url.call();  //
-		Serial.printf("url code: %d\n", code);
 		if ( code == 0 ){
 			gmCfgRead rd(url);
 			int s = 0;
