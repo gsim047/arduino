@@ -84,7 +84,7 @@ String gmUrl::get() const
 	if ( port > 0 ){
 		ret += ":" + String(port);
 	}
-	ret += "/" + url1;
+	ret += url1;
 	if ( param.length() != 0 ){
 		ret += "?";
 		ret += param;
@@ -247,6 +247,7 @@ void gmUrl::init()
 			break;
 		delay(250);
 	}
+	if ( dbg ) Serial.println(WiFi_macAddress());
 
    	clear();
    	set("event", "init");

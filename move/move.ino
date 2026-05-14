@@ -11,6 +11,7 @@
 #include <gmBlink.h>
 #include <gmFn.h>
 
+// датчик HC-SR501
 
 int led = 2;                   // контакт для светодиода
 int sensor = 4;                // контакт для датчика

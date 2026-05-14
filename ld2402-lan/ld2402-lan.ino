@@ -23,6 +23,7 @@ void setup()
 	mySerial.begin(115200);
 	Serial.printf("SoftwareSerial initialized on RX:%d, TX:%d\n", rx_pin, tx_pin);
 
+	//url.dbg = 1;
 	url.init();
 	/*
 	url.WiFi_connect();
